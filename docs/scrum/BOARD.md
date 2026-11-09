@@ -41,6 +41,7 @@ Async daily: add one dated line under *Daily log* (`done / next / blocked`).
 - 11-09 A: B-10 merged. B-11 → Review (P-012). Rollout's anti-center pattern confirmed.
 - 11-09 A: B-11 merged. B-13 sheet → Review (P-013). Label before opening any candidate figures.
 - 11-09 A: PR #10 merged, D-20 accepted. A labels 10 images as a trial.
+- 11-09 A: tried labelling, too costly; dropped (D-21). B-12 unblocked.
 
 ### Retro
 - Keep:
@@ -53,8 +54,8 @@ Async daily: add one dated line under *Daily log* (`done / next / blocked`).
 **Goal:** all maps and scores, baselines, candidates, annotations. Revisit the plan after the 11-17 lecture; HW3 is also due 11-17.
 
 ### Review
-- [ ] B-13 labelling — sheet merged (PR #10). A is trying 10 images, then decides whether both label all 139 or split
-- [ ] B-12 candidate list built; figures wait until labelling is done
+- [ ] B-12 candidate list and figures — no longer waiting on labels
+- [x] B-13 hand labelling — dropped (D-21)
 
 ### Done
 - [x] B-11 summaries, paired tests, figures — PR #9, approved and merged by A

@@ -12,13 +12,13 @@ The question it has to answer (spec §4): *is the model using visual evidence th
 |---|---|---|
 | Public human-attention dataset | MIT1003 (D-01) | Setup 15 |
 | Pretrained model, ≥ 1 explanation method | 2 models, 3 explainers (D-02) | Understanding 15 |
-| ≥ 50 images | All 1003 scored; random 100 hand-annotated (D-06) | Quant 20 |
+| ≥ 50 images | All 1003 scored (D-21) | Quant 20 |
 | Compatible spatial representation, described clearly | One geometry pipeline in `maps.py`, §4 (D-03) | Setup 15 |
 | ≥ 1 metric, 2 encouraged | CC + NSS main, sAUC as center-bias control (D-04) | Quant 20 |
 | Inspect individual cases | `failures.py`, rule-based candidates | Misalign 20 |
 | ≥ 5 low-alignment cases with image, human map, explanation, score | `viz.case_figure()` | Misalign 20 |
 | Shortcut / perceptual-failure reasoning | Occlusion probe gives evidence beyond the heatmap (D-07) | Interpretation 20 |
-| Effect of content, correctness, salient objects | Blind annotations + factor tables (D-06) | Interpretation 20 |
+| Effect of content, correctness, salient objects | Automatic factors, plus hand notes on the final cases (D-21) | Interpretation 20 |
 | "Attribution is not automatically an explanation" | Model-randomization check + cautious wording rule | Understanding 15 |
 | Reproduce reported figures | Scripts → `results/`, notebooks only read from it | Setup 15 |
 | 3 pp recommended, 4 max | At most 3 figures + 1 table in the main text | Clarity 10 |
@@ -57,7 +57,7 @@ Mirrors HW3. The one difference is `docs/` instead of `doc/`, matching the folde
 │   ├── 03_failure_cases.ipynb   # candidates
 │   ├── 04_selected_cases.ipynb  # final cases + probes
 │   └── 05_factors.ipynb         # content, correctness, confidence
-├── annotations/              # committed: human-written labels and case notes
+├── annotations/              # committed: human-written case notes
 ├── tests/
 ├── data/                     # gitignored: raw dataset
 ├── results/                  # scores.csv, tables/, figures/; maps/ is gitignored
@@ -82,10 +82,10 @@ data/mit1003/ ──data.py──▶ images DataFrame + fixations + human maps
  results/scores.csv  ◀── single source of truth ──┘
         ├───────────────────┬────────────────────────┐
         ▼                   ▼                        ▼
- evaluate.py (02_*)   failures.py (03_*)    annotations/*.csv (humans, blind)
+ evaluate.py (02_*)   failures.py (03_*)    annotations/ (final cases)
  tables/*.csv         candidates, figures            │
         │                   ▼                        ▼
-        │             run_probes.py (04_*)     factor tables (05_*)
+        │             run_probes.py (04_*)     observable factors (05_*)
         └───────────────────┴────────────────────────┘
                             ▼
                        report/ (PDF)
@@ -167,7 +167,7 @@ Cases are tagged **shared** (all explainers low) or **explainer-specific** (one 
 - `occlusion_probe()`: mask the top 20% of the human map, or of the model map, and record the drop in the target-class probability. If masking the model's region hurts confidence while masking the human region does not, the model is using something other than human-attended evidence. A shortcut claim in the report needs this support.
 - `randomization_check()`: randomize model weights and measure how much the explanation changes. An explainer that barely changes is not reflecting what the model learned.
 
-**`annotations/labels_<annotator>.csv`** (D-06, D-20): MIT1003 has no class labels, so "model correctness" requires human judgment. A seeded random 100 images, plus every case candidate, are labelled in the page from `scripts/build_label_sheet.py`, with `pred_quality_resnet50` and `pred_quality_vit_b16` (`correct`, `plausible`, `wrong`, `no_applicable_class`) and `has_face`, `has_person`, `has_text`, `scene_type`, `dominant_object`. Annotators see only the image and the prediction, **never the heatmap or score**. Factor statistics use the random sample only; candidates are chosen for low scores and would bias them.
+**Observable factors** (D-21): MIT1003 has no class or content labels, and hand labelling was dropped. `05_factors` uses what can be computed: model confidence (within each model), whether ResNet-50 and ViT agree on the top-1 class, and how concentrated the human fixations are. Faces, text and correctness are discussed only for the final cases, in `annotations/case_notes.csv`.
 
 ## 6. Runtime (cross-platform)
 
@@ -210,7 +210,7 @@ Numbers are not used until these pass.
 | D-03 | No-crop resize, 224×224 canvas (§4) | Keeps all fixations; center crop would bias alignment |
 | D-04 | CC + NSS main, sAUC supplementary | Complementary, with a center-bias control. SIM and KL add little and cost report space |
 | D-13 | Human blur σ = 24 native px (replaces D-05) | Best fit to the dataset's own fixation maps; its documentation gives no blur size or viewing geometry |
-| D-06 | Score all 1003; annotate a random 100 blind | Far above the 50 minimum at little compute cost; hand labelling is the true cost, so it is capped |
+| D-21 | Score all 1003; no hand labelling (replaces D-06, D-20) | Hand labelling proved too costly. Factors are computed automatically and the missing labels are a stated limitation |
 | D-07 | Occlusion probe on selected cases | Turns "the model seems to use the background" into a testable claim |
 | D-08 | Rollout: mean head fusion, no discard ratio | Closest to the original formulation; discard ratio is another tunable that invites cherry-picking |
 | D-15 | Report each explainer's `grid` reference; also compare ResNet and ViT with the ViT map reduced to 7×7 | Coarse grids cap CC, so a direct ResNet vs ViT comparison partly measures grid size |

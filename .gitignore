@@ -16,9 +16,8 @@ results/**/*.npy
 results/**/*.npz
 results/**/*.pt
 results/smoke_*
-# Dataset images and the shortlist, hidden until labelling is finished (D-20)
+# Locally generated page with dataset images (labelling was dropped, D-21)
 results/labeling/
-results/failures/
 results/figures/data_check/fixation_overlays.png
 *.zip
 *.7z

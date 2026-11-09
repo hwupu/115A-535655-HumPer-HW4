@@ -11,7 +11,7 @@ with the least process that still keeps us honest. Carried over from HW3.
 | **Member B** (@ALLEN07056) | Windows + WSL2 Ubuntu (CUDA or CPU) | Scrum Master — keeps `BOARD.md` current, runs ceremonies | **Code reviewer** for every PR; report & case interpretation |
 | **AI agent** (Claude Code, Codex, …) | — | Not a team member — a tool | Drafts code/docs on request; a human owns every output |
 
-@ALLEN07056 reviews all code. @hwupu reviews B's report text. Both annotate images and write the misalignment explanations and the Discussion.
+@ALLEN07056 reviews all code. @hwupu reviews B's report text. Both write the misalignment explanations and the Discussion.
 
 ## 2. Cadence
 
@@ -57,7 +57,7 @@ HW3 is due 11-17 and the related lecture is also on 11-17, so S0 is deliberately
 - **Humans decide, AI drafts.** Every decision in `DECISIONS.md` has a human owner.
 - **Verify, don't trust.** Alignment and explainer code must pass the checks in `ARCHITECTURE.md` §7 before its numbers are used.
 - **Log what matters.** Log prompts that produced code, analysis or report text that we kept. Skip trivial Q&A.
-- **Policy.** Follow the course Academic Integrity & GenAI policy. Disclose AI use in the report (using `PROMPT_LOG.md` as evidence). Annotations and interpretation of misalignment cases must be our own.
+- **Policy.** Follow the course Academic Integrity & GenAI policy. Disclose AI use in the report (using `PROMPT_LOG.md` as evidence). Interpretation of misalignment cases must be our own.
 
 ## 7. Git (minimal)
 
