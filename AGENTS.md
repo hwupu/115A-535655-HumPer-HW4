@@ -31,6 +31,7 @@ Team of 2: Member A (@hwupu, macOS, Apple Silicon) and Member B (@ALLEN07056, Wi
 - There are no hand labels (D-21). Confidence and model agreement are proxies, so never present them as measured correctness.
 - Do not write the perceptual explanations of misalignment cases as final text. Draft observations only; humans own the interpretation.
 - Check every citation against the actual paper before it enters the report.
+- Report style (as in HW3): plain ELI5 language with a **Brief:** lead, never labelled ELI5. Use colons and hyphens only where grammatically correct; no em-dash asides.
 
 ## Cross-platform rules (macOS + WSL)
 - Get the device via `humper.get_device()` (cuda > mps > cpu; override with `HUMPER_DEVICE`). Never hard-code `"mps"` or `"cuda"`.
