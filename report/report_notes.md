@@ -15,7 +15,7 @@ Points that must reach the report. Check off when drafted.
 
 - [ ] **Human blur (§2).** σ = 24 native px, fitted to the dataset's own maps because its documentation gives no blur size or viewing geometry (D-13).
 
-- [ ] **Center-crop sensitivity (§2; D-25).** On 200 images, the crop keeps 89.8% of fixations on average (lowest 40.4%). The order of explainers and center prior stays the same on each metric. Under the crop, center-prior CC is 0.338 (no crop 0.403) and NSS 0.812 (1.262); ResNet-50 Grad-CAM NSS is 0.627 (0.901). The center prior still leads on CC and NSS. Do not say the crop inflates alignment. Table: `results/tables/crop_sensitivity.csv`.
+- [ ] **Center-crop sensitivity (§2; D-25).** On 200 images, the crop keeps 89.8% of fixations on average (lowest 40.4%). The three explainers keep their order on every metric, and the center prior stays first on CC and NSS. On sAUC, ViT Grad-CAM (0.521) moves just above the center prior (0.491), both near chance. Under the crop, center-prior CC is 0.338 (no crop 0.403) and NSS 0.812 (1.262); ResNet-50 Grad-CAM NSS is 0.627 (0.901). The center prior still leads on CC and NSS. Do not say the crop inflates alignment. Table: `results/tables/crop_sensitivity.csv`.
 
 - [ ] **No-crop preprocessing has a cost (§2).** Compared with timm's default center crop on 100 images, the top-1 class agrees 66% (ResNet-50) and 55% (ViT-B/16), with nearly equal mean confidence. Many of these images have no clear ImageNet object.
 

@@ -97,7 +97,7 @@ data/mit1003/ ──data.py──▶ images DataFrame + fixations + human maps
 
 Heatmaps must live in one space before comparison, and the report must describe how they got there (spec §3). This is the most error-prone part of the project, so all of it lives in `maps.py`.
 
-**Model input: resize the whole image to 224×224, no center crop.** The usual `Resize(256) + CenterCrop(224)` removes the image border, which removes real fixations (about 10% on average, up to 60% on one image in a 200-image sample). The cost is a mild aspect-ratio distortion. The B-25 center-crop run on 200 images keeps the same ordering of explainers and center prior (`results/tables/crop_sensitivity.csv`); it did not inflate alignment.
+**Model input: resize the whole image to 224×224, no center crop.** The usual `Resize(256) + CenterCrop(224)` removes the image border, which removes real fixations (about 10% on average, up to 60% on one image in a 200-image sample). The cost is a mild aspect-ratio distortion. The B-25 center-crop run on 200 images keeps the same ordering of the three explainers on every metric (`results/tables/crop_sensitivity.csv`); it did not inflate alignment.
 
 **Comparison canvas: 224×224 for every image.** No resampling is needed for 224-sized model maps, and because all maps share a shape, baselines that use other images' maps are trivial. The model grid (7×7 ResNet-50, 14×14 ViT) is far coarser than this canvas, so a larger one adds no information.
 
@@ -211,7 +211,7 @@ Numbers are not used until these pass.
 |---|---|---|
 | D-01 | **Dataset: MIT1003.** Fallback: CAT2000 train | Real eye-tracking on natural photos, the domain ImageNet models know, and small downloads (235 MB stimuli, 10 MB fixation maps, 47 MB per-subject data; URLs responded on 2026-11-09). SALICON has COCO labels but its attention comes from **mouse tracking**, a weaker claim about human vision. CAT2000 has useful categories, but many (fractal, jumbled, inverted) are far outside ImageNet |
 | D-02 | ResNet-50 + ViT-B/16, three explainers (§5) | Separates architecture from method. Single-explainer is the minimum and would leave nothing to compare. CLIP is a stretch goal |
-| D-03 | No-crop resize, 224×224 canvas (§4) | Keeps all fixations. Checked in B-25: the main ordering is unchanged under a center crop |
+| D-03 | No-crop resize, 224×224 canvas (§4) | Keeps all fixations. Checked in B-25: the explainer ordering is unchanged under a center crop |
 | D-04 | CC + NSS main, sAUC supplementary | Complementary, with a center-bias control. SIM and KL add little and cost report space |
 | D-13 | Human blur σ = 24 native px (replaces D-05) | Best fit to the dataset's own fixation maps; its documentation gives no blur size or viewing geometry |
 | D-21 | Score all 1003; no hand labelling (replaces D-06, D-20) | Hand labelling proved too costly. Factors are computed automatically and the missing labels are a stated limitation |
