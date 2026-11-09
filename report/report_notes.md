@@ -23,7 +23,7 @@ Points that must reach the report. Check off when drafted.
 
 - [ ] **Hypothesis to test: Rollout hot spots on background (§4, §5).** On 6 inspected images, ViT Rollout showed bright isolated patches on empty background, and ViT Grad-CAM was speckled, unlike ResNet's smooth object-centered maps. The calculations pass their tests, so this looks like model behavior. Verify it on the full set in B-11/B-12 before claiming anything; a few extreme patches may also affect CC.
 
-- [ ] **Main result: center prior beats every explainer on CC and NSS (§3).** Means over 1003 images, confidence intervals still to come (B-11):
+- [ ] **Main result: center prior beats every explainer on CC and NSS (§3).** Means over 1003 images, with intervals (95% bootstrap intervals in `results/tables/alignment_summary.csv`, tests in `paired_tests.csv`, figure in `results/figures/alignment/alignment_means.png`):
 
   | Map | CC | NSS | sAUC |
   |---|---|---|---|
@@ -34,9 +34,9 @@ Points that must reach the report. Check off when drafted.
 
   A map that ignores image content gets CC 0.422 against 0.288 for the best explainer.
 
-- [ ] **Metrics rank the explainers differently (§3).** `vit_rollout` is lowest on CC and NSS but highest on sAUC. Its shuffled CC is negative (-0.098), which suggests it puts weight away from where people generally look, a pattern CC and NSS punish and sAUC discounts. Verify in B-11/B-12 before stating the cause.
+- [ ] **Metrics rank the explainers differently (§3).** `vit_rollout` is lowest on CC and NSS but highest on sAUC. Its shuffled CC is negative (-0.098). B-11 confirms the spatial pattern: Rollout maps correlate with the center prior at mean CC -0.221 and are negative on 82% of images, against +0.462 for ResNet-50 Grad-CAM and +0.178 for ViT Grad-CAM. So CC and NSS punish its off-center weight, while sAUC discounts that. This describes where the map puts weight, and does not by itself show why.
 
-- [ ] **Image-specific agreement is small (§3).** Score minus its own shuffled score, for CC / NSS / sAUC: ResNet-50 Grad-CAM +0.095 / +0.334 / +0.084; ViT Grad-CAM +0.030 / +0.097 / 0.000; ViT Rollout +0.100 / +0.401 / +0.117.
+- [ ] **Image-specific agreement is small (§3).** Score minus its own shuffled score, for CC / NSS / sAUC: ResNet-50 Grad-CAM +0.095 / +0.334 / +0.084; ViT Grad-CAM +0.030 / +0.097 / 0.000; ViT Rollout +0.100 / +0.401 / +0.117. After Holm correction across 27 tests, all are significant except ViT Grad-CAM on sAUC (p = 0.99), which shows no image-specific agreement on that metric. With 1003 images, report effect sizes as well as p-values.
 
 - [ ] **The two models often disagree (§1, §5).** Their top-1 class matches on only 47% of the 1003 images, which limits how far "the same task" can be assumed when comparing their explanations.
 
