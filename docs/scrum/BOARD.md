@@ -45,6 +45,7 @@ Async daily: add one dated line under *Daily log* (`done / next / blocked`).
 - 11-09 A: B-12 → Review (P-015). Category ranking done; humans pick the final cases next.
 - 11-10 A: B-12 merged, D-22 accepted, 5 cases chosen. B-14 → Review (P-016).
 - 11-10 A: B-14 merged, D-23 accepted. B-17 and B-25 → Review (P-017).
+- 11-10 A: B-17, B-25 merged, D-25 accepted. Report §1 to §3 drafted (P-018).
 
 ### Retro
 - Keep:
@@ -57,11 +58,13 @@ Async daily: add one dated line under *Daily log* (`done / next / blocked`).
 **Goal:** all maps and scores, baselines, candidates, annotations. Revisit the plan after the 11-17 lecture; HW3 is also due 11-17.
 
 ### Review
-- [ ] B-17 factors and B-25 crop sensitivity — A→B (D-25 proposed)
+- [ ] B-18, B-19, B-20 report draft, §1 to §3 — A→B
+- [ ] B-16 case explanations and §5 Discussion — A+B, not started
 - [ ] B-15 five cases recorded in `annotations/case_notes.csv` — A picked; B to review
 - [x] B-13 hand labelling — dropped (D-21)
 
 ### Done
+- [x] B-17, B-25 factors and crop sensitivity — PR #14, approved and merged by A
 - [x] B-14 occlusion and randomization — PR #13, approved and merged by A
 - [x] B-12 category ranking and case figures — PR #12, approved and merged by A
 - [x] B-11 summaries, paired tests, figures — PR #9, approved and merged by A
