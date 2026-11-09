@@ -137,7 +137,7 @@ The shared-model and shared-method pairs follow HW3's D-23 logic: without them, 
 | NSS | Model value at actual fixations | Uses raw fixations, so no blur parameter on the human side |
 | sAUC | Separates this image's fixations from other images' fixations | Supplementary; discounts center bias, which CC and NSS reward |
 
-**`scores.csv`**: tidy, one row per `(image_id, explainer)`. Columns `cc, nss, sauc, device`. Baselines are stored as extra `explainer` values, so all comparisons use the same code path.
+**`scores.csv`**: tidy, one row per `(image_id, explainer)`. Columns `kind, cc, nss, sauc, device`, where `kind` is `explainer`, `reduced` (ViT at 7×7), `reference` (`center`, `grid_*`) or `shuffled`. Baselines are extra `explainer` values, so all comparisons use the same code path.
 
 **`predictions.csv`**: `image_id, model, top1_idx, top1_name, top1_prob, top5_idx`.
 
@@ -197,9 +197,9 @@ Numbers are not used until these pass.
 | 5 | Scaled fixations stay on the same content; a visual overlay in `01_data_check`. ✔ B-03: corner test + 5 images inspected |
 | 6 | Grad-CAM: map changes with target class; rollout: a uniform-attention input gives a uniform map. ✔ B-06, plus a worked example for each and an independent Grad-CAM cross-check |
 | 7 | Prediction sanity after the no-crop resize. ✔ B-05: 12 images inspected, 2 pinned in tests |
-| 8 | Baseline ordering: `shuffled` scores are clearly below same-image human-vs-human scores |
+| 8 | Baseline ordering: `shuffled` scores are clearly below same-image human-vs-human scores. ✔ B-10: `grid_*` CC 0.79 to 0.94, shuffled at most 0.19 |
 | 9 | Cross-device: CPU vs MPS/CUDA maps agree within 1% of the map peak. ✔ B-08, MPS only: 20 images, max 0.05%; CUDA still open |
-| 10 | `scores.csv` rows reproduce from the stored maps |
+| 10 | `scores.csv` rows reproduce from the stored maps. ✔ B-10 |
 
 ## 8. Proposed decisions
 
