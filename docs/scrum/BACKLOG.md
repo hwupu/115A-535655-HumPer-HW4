@@ -22,7 +22,7 @@ Rubric: Understanding 15, Setup/Repro 15, Quant 20, Misalign 20, Interpretation 
 | B-08 | End-to-end smoke run on 20 images; CPU vs accelerator check | S | S0 | A→B | Setup [15] |
 | **Epic 3 — Quantitative evaluation** |||||
 | B-09 | `compute_maps.py` full run (resumable) + `predictions.csv` + run info | M | S1 | A | Quant [20] |
-| B-10 | `compute_scores.py` + `center` and `shuffled` baselines → `scores.csv` | M | S1 | A→B | Quant [20] |
+| B-10 | `compute_scores.py` + `center`, `shuffled` and `grid` references (D-15) → `scores.csv` | M | S1 | A→B | Quant [20] |
 | B-11 | `evaluate.py`: summaries, bootstrap CIs, paired tests; `02_alignment` figure and table | M | S1 | A→B | Quant [20] |
 | **Epic 4 — Misalignment cases** |||||
 | B-12 | `failures.py` + candidate figures (`03_failure_cases`) | M | S1 | A→B | Misalign [20] |

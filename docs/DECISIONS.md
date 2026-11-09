@@ -17,8 +17,9 @@ A `Proposed` decision needs both members to agree at the next planning/review. D
 | D-10 | 2026-11-09 | Docs live in `docs/` (HW3 used `doc/`) | Confirmed by @hwupu; matches the folder already created | Accepted | A |
 | D-11 | 2026-11-09 | Final numbers come from one full run on one machine; the other only cross-checks | Avoids mixing device differences in one table (as HW3 D-12) | Accepted (B-02; sign-off relayed by A, 2026-11-09) | A |
 | D-12 | 2026-11-09 | Commit `scores.csv`, `predictions.csv`, `annotations/`; gitignore `data/` and `results/maps/` | B can analyse without recomputing; maps are large and regenerable | Accepted (B-02; sign-off relayed by A, 2026-11-09) | A |
-| D-13 | 2026-11-09 | Human maps: Gaussian σ = 24 native px on the fixation points from `fixPts` (cut at 127) | Dataset docs give no blur size or viewing geometry. Fit against its own `fixMap` on 100 images: best at 24 (mean CC 0.99985). All 1003 images ≥ 0.99. Points are single pixels, unchanged for cuts of 64/127/200 (40 images) | Proposed | A |
+| D-13 | 2026-11-09 | Human maps: Gaussian σ = 24 native px on the fixation points from `fixPts` (cut at 127) | Dataset docs give no blur size or viewing geometry. Fit against its own `fixMap` on 100 images: best at 24 (mean CC 0.99985). All 1003 images ≥ 0.99. Points are single pixels, unchanged for cuts of 64/127/200 (40 images) | Accepted (A, on PR #1; B has not reviewed) | A |
 | D-14 | 2026-11-09 | GitHub repo is public | Requested by @hwupu; same as HW3. Dataset and overlay figures stay out of git | Accepted | A |
+| D-15 | 2026-11-09 | Add a `grid` reference per explainer (human map passed through its grid); also compare ResNet and ViT with ViT reduced to 7×7 | Found in B-04: over all 1003 human maps, passing through 7×7 caps mean CC at 0.786 and 14×14 at 0.941, so a direct comparison is confounded by grid size | Proposed | A |
 
 ## Template
 
