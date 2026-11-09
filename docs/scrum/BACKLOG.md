@@ -33,8 +33,8 @@ Rubric: Understanding 15, Setup/Repro 15, Quant 20, Misalign 20, Interpretation 
 | B-17 | `05_factors`: alignment vs content, correctness, confidence | M | S2 | A→B | Interpretation [20] |
 | **Epic 5 — Report & submission** |||||
 | B-18 | Report skeleton (5 required sections); choose report tool | S | S1 | B | Clarity [10] |
-| B-19 | Draft §1 Dataset and Model, §2 Experimental Setup | M | S2 | A | Setup [15] |
-| B-20 | Draft §3 Quantitative, §4 Cases, §5 Discussion (limitation + follow-up experiment) | L | S2 | A+B | Interpretation [20] |
+| B-19 | Draft §1 Dataset and Model, §2 Experimental Setup (see `report/report_notes.md`) | M | S2 | A | Setup [15] |
+| B-20 | Draft §3 Quantitative, §4 Cases, §5 Discussion (limitation + follow-up experiment; see `report/report_notes.md`) | L | S2 | A+B | Interpretation [20] |
 | B-21 | Contribution Statement + GenAI disclosure; verify all citations | S | Rel | B | — |
 | B-22 | Clean-clone reproduction on **both** macOS and WSL; README up to date | S | Rel | A+B | Setup [15] |
 | B-23 | Page check (≤ 4 pp), proofread, submit PDF + code | S | Rel | A+B | Clarity [10] |
