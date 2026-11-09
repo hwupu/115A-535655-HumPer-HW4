@@ -61,7 +61,7 @@ HW3 is due 11-17 and the related lecture is also on 11-17, so S0 is deliberately
 
 ## 7. Git (minimal)
 
-- Repo: **private** at <https://github.com/hwupu/115A-535655-HumPer-HW4>. Never commit secrets/tokens or the dataset. WSL member clones into `~/`, not `/mnt/c/`.
+- Repo: **public** at <https://github.com/hwupu/115A-535655-HumPer-HW4>. Never commit secrets/tokens or the dataset. WSL member clones into `~/`, not `/mnt/c/`.
 - `.gitattributes` forces LF line endings; WSL member also sets `core.autocrlf input`.
 - `main` only changes via reviewed PRs (one per ticket, squash-merge). Docs-only board updates may go straight to `main`.
 - `data/` and `results/maps/` are gitignored; `uv.lock` is committed.

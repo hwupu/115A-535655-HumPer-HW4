@@ -10,9 +10,7 @@ Async daily: add one dated line under *Daily log* (`done / next / blocked`).
 **Goal:** env + data ready; one explainer scored end-to-end on 20 images; sanity checks pass.
 
 ### To Do
-- [ ] B-01b git + private GitHub repo done; B invite pending — A
 - [ ] B-01c WSL setup — B
-- [ ] B-03 MIT1003 + `data.py` + notebook 01 — A→B
 - [ ] B-04 `maps.py` — A→B
 - [ ] B-05 `models.py` — A→B
 - [ ] B-06 `explain.py` — A→B
@@ -22,13 +20,17 @@ Async daily: add one dated line under *Daily log* (`done / next / blocked`).
 ### Doing
 
 ### Review
+- [ ] B-03 MIT1003 + `data.py` + notebook 01 — A→B (D-13 needs B's agreement)
 - [ ] B-01 scaffold — A (awaiting human read-through)
 
 ### Done
+- [x] B-01b git + public GitHub repo; @ALLEN07056 invited — A
 - [x] B-02 GenAI policy; D-01..D-12 agreed — approved by A 11-09
 
 ### Daily log
 - 11-09 A: architecture planned (P-001), scaffold built (P-002).
+
+- 11-09 A: B-03 → Review (P-004). Human blur fitted at σ = 24 px; maps cover early attention only.
 
 ### Retro
 - Keep:

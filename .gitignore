@@ -16,6 +16,7 @@ results/**/*.npy
 results/**/*.npz
 results/**/*.pt
 results/smoke_*
+results/figures/data_check/fixation_overlays.png
 *.zip
 *.7z
 
