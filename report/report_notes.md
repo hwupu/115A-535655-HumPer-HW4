@@ -20,4 +20,6 @@ Points that must reach the report. Check off when drafted.
 
 - [ ] **ImageNet labels often do not fit (§1, §5).** Scene images get arbitrary labels (a misty lake as "traffic light"), which is why prediction quality is hand-labelled.
 
+- [ ] **Hypothesis to test: Rollout hot spots on background (§4, §5).** On 6 inspected images, ViT Rollout showed bright isolated patches on empty background, and ViT Grad-CAM was speckled, unlike ResNet's smooth object-centered maps. The calculations pass their tests, so this looks like model behavior. Verify it on the full set in B-11/B-12 before claiming anything; a few extreme patches may also affect CC.
+
 - [ ] **Free viewing vs classification (§5 Discussion).** Human observers had no classification task, so low alignment is not automatically a model failure.
