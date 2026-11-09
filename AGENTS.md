@@ -28,7 +28,7 @@ Team of 2: Member A (@hwupu, macOS, Apple Silicon) and Member B (@ALLEN07056, Wi
 - MIT1003 observers free-viewed; models classified. Low alignment is not automatically a model failure.
 - Write "the explanation highlights X", not "the model looks at X because…", unless a probe supports it. Attribution is not a full explanation of model reasoning (spec §6).
 - Report alignment scores alongside the `center` baseline.
-- Annotators must not see heatmaps or scores while labelling `annotations/labels.csv`. Factor statistics use the random sample only.
+- There are no hand labels (D-21). Confidence and model agreement are proxies, so never present them as measured correctness.
 - Do not write the perceptual explanations of misalignment cases as final text. Draft observations only; humans own the interpretation.
 - Check every citation against the actual paper before it enters the report.
 

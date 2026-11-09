@@ -26,11 +26,11 @@ Rubric: Understanding 15, Setup/Repro 15, Quant 20, Misalign 20, Interpretation 
 | B-11 | `evaluate.py`: summaries, bootstrap CIs, paired tests; `02_alignment` figure and table | M | S1 | A→B | Quant [20] |
 | **Epic 4 — Misalignment cases** |||||
 | B-12 | `failures.py` + candidate figures (`03_failure_cases`) | M | S1 | A→B | Misalign [20] |
-| B-13 | Annotation sheet: seeded random 100 + candidates; both members label blind (D-06) | M | S1 | A+B | Interpretation [20] |
+| B-13 | ~~Blind hand labelling~~ dropped (D-21) | — | — | — | — |
 | B-14 | `probes.py`, `run_probes.py`: occlusion on candidates, model randomization (D-07) | M | S2 | A→B | Interpretation [20] |
 | B-15 | Pick ≥ 5 final cases, record reasons in `annotations/case_notes.csv`, final figures (`04_selected_cases`) | M | S2 | A+B | Misalign [20] |
 | B-16 | Explanation per case, team-written | L | S2 | A+B | Interpretation [20] |
-| B-17 | `05_factors`: alignment vs content, correctness, confidence | M | S2 | A→B | Interpretation [20] |
+| B-17 | `05_factors`: alignment vs confidence, model agreement, fixation concentration (D-21) | M | S2 | A→B | Interpretation [20] |
 | **Epic 5 — Report & submission** |||||
 | B-18 | Report skeleton (5 required sections); choose report tool | S | S1 | B | Clarity [10] |
 | B-19 | Draft §1 Dataset and Model, §2 Experimental Setup (see `report/report_notes.md`) | M | S2 | A | Setup [15] |

@@ -1,10 +1,10 @@
-"""Candidate selection and blindness of the labelling sheet."""
+"""Candidate selection."""
 
 import numpy as np
 import pandas as pd
 import pytest
 
-from humper import explain, failures, labeling
+from humper import explain, failures
 
 NAMES = list(explain.EXPLAINERS)
 
@@ -55,29 +55,3 @@ def test_candidates_are_unique_and_contain_planted_cases(scores, table):
     assert selected.loc["i010", "pattern"] == "shared"
     assert selected.loc["i020", "reason"] == "shared_high"
     assert len(selected) == 4 + 3 * 4 + 2
-
-
-def test_random_sample_does_not_depend_on_candidates(table):
-    table = pd.DataFrame({"image_id": [f"i{n:04d}" for n in range(1003)]})
-    first = labeling.random_sample(table)
-    assert first == labeling.random_sample(table)
-    assert len(first) == labeling.RANDOM_SAMPLE_SIZE
-
-
-def test_sheet_merges_without_duplicates_and_is_shuffled():
-    table = pd.DataFrame({"image_id": [f"i{n:04d}" for n in range(1003)]})
-    sample = labeling.random_sample(table)
-    extra = ["i0000", sample[0]]
-    ids = labeling.sheet_ids(table, extra)
-    assert len(ids) == len(set(ids)) == len(set(sample) | set(extra))
-    assert ids != sorted(ids)
-
-
-def test_sheet_entries_reveal_only_classes():
-    predictions = pd.DataFrame({
-        "image_id": ["a", "a"], "model": ["resnet50", "vit_b16"], "top1_name": ["cat", "dog"],
-        "top1_prob": [0.5, 0.6], "top1_idx": [1, 2], "top5_idx": ["1", "2"],
-    })
-    assert labeling.sheet_entries(["a"], predictions) == [
-        {"image_id": "a", "resnet50": "cat", "vit_b16": "dog"}
-    ]
