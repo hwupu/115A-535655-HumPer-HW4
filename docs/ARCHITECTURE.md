@@ -128,7 +128,7 @@ Heatmaps must live in one space before comparison, and the report must describe 
 
 The shared-model and shared-method pairs follow HW3's D-23 logic: without them, a difference could be either the architecture or the explanation method. Grad-CAM comes from the `grad-cam` package (spec §6 recommends existing implementations), stopping before its min-max scaling so all-zero maps stay visible (D-17). Rollout is about 20 lines over timm attention hooks, so it stays in-repo and tested.
 
-**`alignment.py`** (D-04): `MetricSpec(name, fn, higher_is_better, kind, note)`, as in HW3's registry.
+**`alignment.py`** (D-04): `MetricSpec(name, fn, higher_is_better, kind, note)`, as in HW3's registry. `score(saliency, human, fixations, negatives)` returns all metrics for one map; `negatives` are the fixations of all other images (D-19).
 
 | Metric | Measures | Why here |
 |---|---|---|
@@ -187,9 +187,9 @@ Numbers are not used until these pass.
 
 | # | Check |
 |---|---|
-| 1 | CC(a, a) = 1, CC(a, −a) = −1, CC is invariant to scale and offset |
-| 2 | NSS of a map peaked exactly at the fixations is high; a constant map gives `NaN`, not a crash |
-| 3 | sAUC ≈ 0.5 for a random map |
+| 1 | CC(a, a) = 1, CC(a, −a) = −1, CC is invariant to scale and offset. ✔ B-07 |
+| 2 | NSS of a map peaked exactly at the fixations is high; a constant map gives `NaN`, not a crash. ✔ B-07 |
+| 3 | sAUC ≈ 0.5 for a random map and for a pure center prior. ✔ B-07 |
 | 4 | Our human map vs the dataset's own `fixMap`: high CC. ✔ B-03: all 1003 images, mean 0.99986, min 0.991 |
 | 5 | Scaled fixations stay on the same content; a visual overlay in `01_data_check`. ✔ B-03: corner test + 5 images inspected |
 | 6 | Grad-CAM: map changes with target class; rollout: a uniform-attention input gives a uniform map. ✔ B-06, plus a worked example for each and an independent Grad-CAM cross-check |

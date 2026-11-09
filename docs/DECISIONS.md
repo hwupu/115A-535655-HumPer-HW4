@@ -21,8 +21,9 @@ A `Proposed` decision needs both members to agree at the next planning/review. D
 | D-14 | 2026-11-09 | GitHub repo is public | Requested by @hwupu; same as HW3. Dataset and overlay figures stay out of git | Accepted | A |
 | D-15 | 2026-11-09 | Add a `grid` reference per explainer (human map passed through its grid); also compare ResNet and ViT with ViT reduced to 7×7 | Found in B-04: over all 1003 human maps, passing through 7×7 caps mean CC at 0.786 and 14×14 at 0.941, so a direct comparison is confounded by grid size | Accepted (A, on PR #2; B has not reviewed) | A |
 | D-16 | 2026-11-09 | Weights: `resnet50.tv2_in1k`, `vit_base_patch16_224.augreg2_in21k_ft_in1k`, both at 224×224 | Modern ImageNet-1k weights with a 7×7 and 14×14 grid at 224. Measured on 100 images, no-crop vs timm's default crop: top-1 agrees 66% (ResNet) and 55% (ViT), mean confidence nearly equal | Accepted (A, on PR #3; B has not reviewed) | A |
-| D-17 | 2026-11-09 | Grad-CAM: target logit (pre-softmax), `grad-cam` package up to the ReLU, no min-max scaling, stored on the raw grid | The package's normal output scales each map, turning an all-zero map into a valid-looking one and losing the grid. Checked against an independent implementation | Proposed | A |
+| D-17 | 2026-11-09 | Grad-CAM: target logit (pre-softmax), `grad-cam` package up to the ReLU, no min-max scaling, stored on the raw grid | The package's normal output scales each map, turning an all-zero map into a valid-looking one and losing the grid. Checked against an independent implementation | Accepted (A, on PR #4; B has not reviewed) | A |
 | D-18 | 2026-11-09 | Keep center-crop sensitivity (B-25) instead of cutting it early | No-crop changes the top-1 class on many images (D-16), so the choice needs measuring | Accepted | A |
+| D-19 | 2026-11-09 | sAUC negatives: canvas fixations of all other images; ties count as half | No random sampling, so scores are deterministic; a center prior then scores about 0.5 (tested) | Proposed | A |
 
 ## Template
 
