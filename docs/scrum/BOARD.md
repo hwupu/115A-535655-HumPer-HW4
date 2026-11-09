@@ -46,6 +46,7 @@ Async daily: add one dated line under *Daily log* (`done / next / blocked`).
 - 11-10 A: B-12 merged, D-22 accepted, 5 cases chosen. B-14 → Review (P-016).
 - 11-10 A: B-14 merged, D-23 accepted. B-17 and B-25 → Review (P-017).
 - 11-10 A: B-17, B-25 merged, D-25 accepted. Report §1 to §3 drafted (P-018).
+- 11-10 A: §4 and §5 drafted by the agent for review (P-020). A handles the PDF.
 
 ### Retro
 - Keep:
@@ -59,7 +60,7 @@ Async daily: add one dated line under *Daily log* (`done / next / blocked`).
 
 ### Review
 - [ ] B-18, B-19, B-20 report draft, §1 to §3 — A→B
-- [ ] B-16 case explanations and §5 Discussion — A+B, not started
+- [ ] B-16 case explanations and §5 Discussion — AI draft in PR #15, A reviewing
 - [ ] B-15 five cases recorded in `annotations/case_notes.csv` — A picked; B to review
 - [x] B-13 hand labelling — dropped (D-21)
 

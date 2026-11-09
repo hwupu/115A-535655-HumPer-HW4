@@ -259,7 +259,7 @@ We masked the top 20% of each map and measured the fall in the top answer's prob
 
 ## 4. Misalignment Cases
 
-**[TEAM TO WRITE the explanation for each case. Everything below is evidence, not explanation.]**
+**Brief:** We picked five photos where one explanation disagrees strongly with people while another explanation fits better. For each one, we ask what people looked at, what the explanation highlights, and whether covering those regions changes the model's confidence. Low alignment has more than one cause, so the answer differs from case to case.
 
 We chose cases by measurement, not by appearance. For each Holm-significant category effect, we took the photo with the largest gap between the two explainers, leaving out the 5% of photos with the fewest fixations.
 
@@ -267,40 +267,79 @@ We chose cases by measurement, not by appearance. For each Holm-significant cate
 
 *Figure 2. Input, human attention and the three explanations, with each model's top answer and scores. Maps are scaled for display.*
 
-| # | Category | Weak, then better fit | Top answer (weak model) | Weak CC / NSS / sAUC | Better fit CC / NSS / sAUC | Occlusion fall, blur (own / human / random) | Occlusion fall, mean color (own / human / random) | Starting probability |
-|---|---|---|---|---|---|---|---|---|
-| 1 | Faces | ResNet Grad-CAM, then Rollout | mountain bike | −0.10 / −0.38 / 0.22 | 0.40 / 1.66 / 0.73 | 0.309 / 0.204 / 0.197 | 0.309 / 0.284 / 0.232 | 0.313 |
-| 2 | Text | Rollout, then ViT Grad-CAM | menu | −0.34 / −1.38 / 0.21 | 0.53 / 2.15 / 0.78 | 0.071 / 0.223 / 0.120 | 0.030 / 0.222 / 0.150 | 0.223 |
-| 3 | Edge or texture | Rollout, then ViT Grad-CAM | mask | −0.19 / −0.56 / 0.42 | 0.49 / 1.45 / 0.69 | −0.058 / 0.581 / 0.079 | −0.077 / 0.695 / 0.112 | 0.746 |
-| 4 | Small salient | ViT Grad-CAM, then Rollout | lakeside | −0.16 / −0.65 / 0.26 | 0.34 / 1.48 / 0.84 | 0.286 / −0.233 / −0.009 | 0.112 / 0.100 / 0.126 | 0.602 |
-| 5 | Faces | ViT Grad-CAM, then Rollout | stage | −0.23 / −0.87 / 0.22 | 0.27 / 1.01 / 0.81 | 0.147 / −0.273 / −0.027 | 0.199 / −0.342 / −0.078 | 0.333 |
+**Case 1. Faces, ResNet-50 Grad-CAM weak.** Two people ride bicycles toward the camera. People looked at the riders' faces and upper bodies, while Grad-CAM highlights the lower area around the bicycles, in line with the model's answer of "mountain bike." Covering the Grad-CAM region removes nearly all of the confidence (0.309 of 0.313), and covering the human region does little more than a random region with blur fill. This looks like a difference in task more than a mistake. Faces draw people's eyes even with no instructions, while the classifier's answer depends on the object it names. Since the bicycle is the named object, this is not a shortcut.
 
-*Table 4. Case evidence. Occlusion values are for the weak explainer's model. In case 4 the human-mask result changes sign between fills, so occlusion is not reliable there.*
+**Case 2. Text, ViT Rollout weak.** People read the top of a chalkboard sign. ViT Grad-CAM highlights the board and the model answers "menu." Rollout instead puts its weight on the grass and pavement around the board. Covering the human region or the Grad-CAM region removes all of the confidence (0.223), while covering the Rollout region removes little (0.071 with blur, 0.030 with mean color). Here the model and the people appear to use the same evidence, and the Rollout map fails to show it. This is a failure of the explanation, not evidence that the model ignores the text.
 
-For each case, explain what the human and the model appear to prioritize, and why. The brief suggests background context, object texture, edges, small salient objects, faces, text, contextual shortcuts or task-irrelevant regions. Note whether the case suggests a shortcut (Geirhos et al.) or a failure of perceptual alignment.
+**Case 3. Edges and texture, ViT Rollout weak.** The photo is full of beads and shiny masks. People looked at the middle of the green mask and the beads below it, and ViT Grad-CAM highlights the mask, matching the answer "mask." Rollout highlights mostly the dark corners. Covering the human region lowers confidence by 0.581 to 0.695, and covering the Grad-CAM region by a similar amount, but covering the Rollout region slightly raises it. As in Case 2, the visible disagreement comes from the Rollout map rather than from the model's apparent evidence.
 
-- **Case 1.** [TEAM]
-- **Case 2.** [TEAM]
-- **Case 3.** [TEAM]
-- **Case 4.** [TEAM]
-- **Case 5.** [TEAM]
+**Case 4. Small salient objects, ViT Grad-CAM weak.** People looked at the small dark figures under the willow tree. ViT Grad-CAM spreads over the water, the tree and the sky, with the answer "lakeside." A lakeside is a whole scene, so highlighting water and surroundings is reasonable for that answer, and the small figures are not needed to name it. This suggests that people follow small objects that stand out, while the model relies on broad scene context. Occlusion cannot settle this case, because the human-region result changes sign between the two fills.
+
+**Case 5. Faces, ViT Grad-CAM weak.** Two musicians perform on a dark stage, and people looked at their faces and upper bodies. ViT Grad-CAM is scattered over the surroundings, with the answer "stage." Covering the human region raises confidence in "stage" by 0.273 to 0.342, while covering the Grad-CAM region lowers it by 0.147 to 0.199. The people may even compete with the "stage" answer, which appears to rest on surrounding context. This is the clearest sign of contextual evidence among our cases. We would not call it a harmful shortcut, because the setting really is a stage, but it shows that the model's evidence and human attention can point to different parts of the same photo.
+
+**Evidence for reference (remove before submission)**
+
+- **Selection.** Each case is the top gap for a Holm-significant effect in `results/failures/category_cases.csv`. Each occlusion list gives the fall in probability when covering the weak explainer's own region, the human region and a random region.
+- **Case 1, `i1126243635`.**
+  - Weak is ResNet-50 Grad-CAM, with CC −0.10, NSS −0.38, sAUC 0.22 and top answer "mountain bike."
+  - Better fit is ViT Rollout, with CC 0.40, NSS 1.66 and sAUC 0.73.
+  - Starting probability is 0.313.
+  - Blur fill gives 0.309 own, 0.204 human and 0.197 random.
+  - Mean-color fill gives 0.309 own, 0.284 human and 0.232 random.
+- **Case 2, `i2252029279`.**
+  - Weak is ViT Rollout, with CC −0.34, NSS −1.38, sAUC 0.21 and top answer "menu."
+  - Better fit is ViT Grad-CAM, with CC 0.53, NSS 2.15 and sAUC 0.78.
+  - Starting probability is 0.223.
+  - Blur fill gives 0.071 own, 0.223 human and 0.120 random.
+  - Mean-color fill gives 0.030 own, 0.222 human and 0.150 random.
+  - The better-fit ViT Grad-CAM region falls by 0.223 with both fills.
+- **Case 3, `i2238366740`.**
+  - Weak is ViT Rollout, with CC −0.19, NSS −0.56, sAUC 0.42 and top answer "mask."
+  - Better fit is ViT Grad-CAM, with CC 0.49, NSS 1.45 and sAUC 0.69.
+  - Starting probability is 0.746.
+  - Blur fill gives −0.058 own, 0.581 human and 0.079 random.
+  - Mean-color fill gives −0.077 own, 0.695 human and 0.112 random.
+  - The better-fit ViT Grad-CAM region falls by 0.563 with blur and 0.593 with mean color.
+- **Case 4, `i104935329`.**
+  - Weak is ViT Grad-CAM, with CC −0.16, NSS −0.65, sAUC 0.26 and top answer "lakeside."
+  - Better fit is ViT Rollout, with CC 0.34, NSS 1.48 and sAUC 0.84.
+  - Starting probability is 0.602.
+  - Blur fill gives 0.286 own, −0.233 human and −0.009 random.
+  - Mean-color fill gives 0.112 own, 0.100 human and 0.126 random.
+  - The human-region result changes sign between fills, so occlusion is not reliable here.
+- **Case 5, `i2194959008`.**
+  - Weak is ViT Grad-CAM, with CC −0.23, NSS −0.87, sAUC 0.22 and top answer "stage."
+  - Better fit is ViT Rollout, with CC 0.27, NSS 1.01 and sAUC 0.81.
+  - Starting probability is 0.333.
+  - Blur fill gives 0.147 own, −0.273 human and −0.027 random.
+  - Mean-color fill gives 0.199 own, −0.342 human and −0.078 random.
 
 ## 5. Discussion
 
-**[TEAM TO WRITE using the evidence below. Answer this question: is the model using visual evidence that is consistent with human attention?]**
+**Brief:** The models and people agree only partly, and a low score does not always mean the model is wrong. Sometimes the model is solving a different task, and sometimes the heatmap is simply a poor window into the model.
 
-Available evidence:
+**Is the model using visual evidence that is consistent with human attention?** Only partly. Covering the regions people looked at lowers confidence more than covering random regions (Table 3), so human and model evidence do overlap. But a map that ignores the photo and favors the center beats every explanation on CC and NSS, and the Grad-CAM regions matter more to the models than the regions people looked at. Much of what looks like agreement on CC and NSS may come from a shared preference for the center.
+
+**Where and when do they differ?** The clearest pattern involves faces. Faces lower both Grad-CAM maps (Table 2), which fits Cases 1 and 5, where people looked at faces and the models' answers concern a bicycle or a stage. Faces attract people during free viewing, but an ImageNet classifier has little reason to use them when no class names them. Alignment also changes with how focused people are, since broader human attention goes with worse Rollout scores. Agreement rises only weakly with model confidence and for ViT Grad-CAM when the two models give the same answer. Those are proxies, so we cannot conclude that correct predictions align better.
+
+**Why do they differ?** Our cases suggest at least three reasons. The first is a difference in task, because people freely explored the photos while the models named one class (Cases 1 and 5). The second is scale of evidence, because a scene class can rest on broad context while people notice small objects (Case 4). The third is the explanation method itself, because in Cases 2 and 3 the occlusion results suggest the model relies on regions people attended, and the Rollout map misses them. We found contextual evidence in Case 5, but did not establish a harmful shortcut. That would need a test showing that the model's answer changes when the context changes.
+
+**A plausible map is not an explanation.** Rollout has the best shuffled AUC, yet covering its regions is close to covering random regions. A map can score well against people and still say little about what the model depends on. For that reason, we read these heatmaps as approximations and do not treat them as the model's reasoning.
+
+**Limitations.** The observers had no classification task, and the maps cover only early fixations. MIT1003 has no labels for correctness or content, so correctness is measured through proxies and our content categories come from imperfect detectors. Occlusion creates unnatural images, and five cases cannot represent the whole dataset.
+
+**Follow-up experiment.** Collect eye tracking on the same photos while people perform the classification task. If alignment improves mainly on faces and context-heavy photos, that would support task difference as the main cause.
+
+**Evidence for reference (remove before submission)**
 
 - **Content.** Table 2 shows that faces lower both Grad-CAM maps but not Rollout.
-- **Model correctness, through proxies only.** Higher confidence goes with slightly better CC and NSS for ResNet-50 Grad-CAM (rho 0.12 and 0.11) and ViT Grad-CAM (0.19 and 0.17), and not reliably for Rollout. Where ResNet-50 and ViT give the same top answer (47% of photos), ViT Grad-CAM aligns better (+0.054, Holm p = 0.010).
-- **Salient objects and attention spread.** Broader human attention goes with worse Rollout scores (CC rho −0.44, NSS −0.38, shuffled AUC −0.30).
-- **Plausible maps can mislead.** Rollout has the best shuffled AUC, but covering its regions is close to covering random regions (Table 3).
-- **Limitations to choose from.** Observers had no classification task. The maps show early fixations only. There are no labels for correctness or content. The detectors are imperfect. Occlusion produces unnatural images. ImageNet classes fit many scenes poorly, and the two models often explain different answers.
-- **Possible follow-up experiments.** Task-driven eye tracking on the same photos, adding labels for correctness and content, or comparing other explainers or a CLIP encoder.
-
-## Contribution Statement
-
-*[TEAM TO WRITE each member's role. Excluded from the page limit.]*
+- **Model correctness, through proxies only.** Higher confidence goes with slightly better CC and NSS for ResNet-50 Grad-CAM (rho 0.12 and 0.11) and ViT Grad-CAM (0.19 and 0.17), and not reliably for Rollout. Where ResNet-50 and ViT give the same top answer (47% of photos), ViT Grad-CAM aligns better (+0.054, Holm p = 0.010). ResNet-50 Grad-CAM (+0.037) and Rollout (+0.004) do not survive correction.
+- **Salient objects and attention spread.** Broader human attention goes with worse Rollout scores (CC rho −0.44, NSS −0.38, shuffled AUC −0.30), and with worse ResNet-50 Grad-CAM on NSS and shuffled AUC (−0.22 and −0.20). ViT Grad-CAM is unaffected.
+- **Plausible maps can mislead.** Rollout has the best shuffled AUC (0.611), but its occlusion fall is 0.177 with blur and 0.173 with mean color, against 0.152 and 0.177 for random regions and 0.240 and 0.246 for human regions.
+- **Center bias.** The center prior reaches CC 0.422 and NSS 1.326. Explanations reach at most CC 0.288 and NSS 0.917.
+- **Other limitations.** ImageNet classes fit many scenes poorly, and the two models often explain different answers. About three-quarters of sampled text flags showed real text.
+- **Other possible follow-ups.** Add labels for correctness and content, or compare other explainers or a CLIP encoder.
+- **Source tables.** See `category_effects.csv`, `factor_correlations.csv`, `model_agreement_effect.csv`, `occlusion_summary.csv` and `occlusion_cases.csv` in `results/tables/`.
 
 ## Works Cited
 
