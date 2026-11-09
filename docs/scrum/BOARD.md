@@ -43,6 +43,7 @@ Async daily: add one dated line under *Daily log* (`done / next / blocked`).
 - 11-09 A: PR #10 merged, D-20 accepted. A labels 10 images as a trial.
 - 11-09 A: tried labelling, too costly; dropped (D-21). B-12 unblocked.
 - 11-09 A: B-12 → Review (P-015). Category ranking done; humans pick the final cases next.
+- 11-10 A: B-12 merged, D-22 accepted, 5 cases chosen. B-14 → Review (P-016).
 
 ### Retro
 - Keep:
@@ -55,10 +56,12 @@ Async daily: add one dated line under *Daily log* (`done / next / blocked`).
 **Goal:** all maps and scores, baselines, candidates, annotations. Revisit the plan after the 11-17 lecture; HW3 is also due 11-17.
 
 ### Review
-- [ ] B-12 category ranking and case figures — A→B (D-22 proposed)
+- [ ] B-14 occlusion and randomization — A→B (D-23 proposed)
+- [ ] B-15 five cases recorded in `annotations/case_notes.csv` — A picked; B to review
 - [x] B-13 hand labelling — dropped (D-21)
 
 ### Done
+- [x] B-12 category ranking and case figures — PR #12, approved and merged by A
 - [x] B-11 summaries, paired tests, figures — PR #9, approved and merged by A
 - [x] B-10 scores and references — PR #8, approved and merged by A
 - [x] B-09 full maps and predictions — PR #7, approved and merged by A
