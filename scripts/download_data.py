@@ -14,6 +14,8 @@ ARCHIVES = {
     f"{FIX_MAPS}.zip": "1c87b8c8023cd1e93fd3f8a341829cab54972190040699ba6dc8f04c0c997cd9",
 }
 N_IMAGES = 1003
+YUNET_URL = "https://github.com/opencv/opencv_zoo/raw/main/models/face_detection_yunet/face_detection_yunet_2023mar.onnx"
+YUNET_SHA256 = "8f2383e4dd3cfbb4553ea8718107fc0423210dc964f9f4280604804ed2552fa4"
 
 
 def sha256(path: Path) -> str:
@@ -41,10 +43,22 @@ def extract(path: Path) -> None:
                 archive.extract(member, MIT_ROOT)
 
 
+def fetch_face_model() -> None:
+    path = DOWNLOAD_DIR / "yunet" / "face_detection_yunet_2023mar.onnx"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if not (path.exists() and sha256(path) == YUNET_SHA256):
+        print("downloading the YuNet face model")
+        urllib.request.urlretrieve(YUNET_URL, path)
+        if sha256(path) != YUNET_SHA256:
+            raise RuntimeError("YuNet: sha256 does not match the pinned value")
+
+
 def main() -> None:
     DOWNLOAD_DIR.mkdir(parents=True, exist_ok=True)
     for name, expected in ARCHIVES.items():
         extract(fetch(name, expected))
+
+    fetch_face_model()
 
     stems = {p.stem for p in (MIT_ROOT / STIMULI).glob("*.jpeg")}
     if len(stems) != N_IMAGES:

@@ -18,6 +18,8 @@ results/**/*.pt
 results/smoke_*
 # Locally generated page with dataset images (labelling was dropped, D-21)
 results/labeling/
+# Case figures show dataset images
+results/figures/failures/
 results/figures/data_check/fixation_overlays.png
 *.zip
 *.7z

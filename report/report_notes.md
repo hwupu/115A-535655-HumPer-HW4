@@ -44,4 +44,13 @@ Points that must reach the report. Check off when drafted.
 
 - [ ] **Limitation: no labels for correctness or content (§5).** MIT1003 has no class or content labels and we did not hand-label images (D-21). Confidence and model agreement are proxies for correctness. Claims about faces, text and scene content come from the final cases only. A natural follow-up is to add such labels and measure these effects across images.
 
+- [ ] **Category ranking (§3, §4; D-22).** Inside minus outside a category on each explainer's own CC + NSS percentile, n = 1003, Holm across 15 tests. Table: `results/tables/category_effects.csv`.
+  - Harder than the explainer's own average: ViT Rollout on text (-0.189), ResNet-50 Grad-CAM on faces (-0.176), ViT Grad-CAM on faces (-0.128), ViT Rollout on edge/texture-rich images (-0.107), ResNet-50 Grad-CAM on text (-0.096) and on edge/texture-rich images (-0.082).
+  - Easier: ViT Rollout on small salient attention (+0.184).
+  - Rollout on faces is about average (+0.008), so faces hurt the Grad-CAM maps specifically.
+  - Peripheral human attention shows no effect that survives correction.
+  - Say "associated with", not "caused by". Categories overlap, and the percentile is relative to each explainer.
+
+- [ ] **Detector limits (§2).** Face detections were all correct on 20 sampled images. Text flags were real on about three-quarters of 20 sampled images, with false hits such as ornate ceilings, so text effects are less certain. Both are one-off visual checks.
+
 - [ ] **Free viewing vs classification (§5 Discussion).** Human observers had no classification task, so low alignment is not automatically a model failure.
