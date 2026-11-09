@@ -118,7 +118,7 @@ Heatmaps must live in one space before comparison, and the report must describe 
 
 **`models.py`**: `ModelSpec(name, timm_id, family, target_layer, grid, reshape)`; `create(spec, device)` returns the model in eval mode; `preprocess(spec, image)` applies the whole-image resize and the model's **own** mean/std from the timm config (ResNet and ViT weights differ; never share one normalization); `predict(model, x, k)` returns the top-k classes. Weights are pinned in D-16.
 
-**`explain.py`** (D-02): `ExplainerSpec(name, model, method, class_specific)`; `explain(spec, model, x, target=None) -> (224,224) float32`. `target` defaults to the model's top-1 prediction, because no ground-truth label exists here and the question is what supported the model's own decision.
+**`explain.py`** (D-02): `ExplainerSpec(name, model, method, class_specific)`; `explain_grid(spec, model, x, target=None)` returns the raw map on the model's grid, and `explain(...)` returns it on the 224×224 canvas. `target` defaults to the model's top-1 prediction, because no ground-truth label exists here and the question is what supported the model's own decision.
 
 | Explainer | Model | Class-specific | Purpose |
 |---|---|---|---|
@@ -126,7 +126,7 @@ Heatmaps must live in one space before comparison, and the report must describe 
 | `vit_gradcam` | ViT-B/16 | Yes | Against ResNet: same method, different architecture |
 | `vit_rollout` | ViT-B/16 | No | Against `vit_gradcam`: same model, different method |
 
-The shared-model and shared-method pairs follow HW3's D-23 logic: without them, a difference could be either the architecture or the explanation method. Grad-CAM comes from the `grad-cam` package (spec §6 recommends existing implementations). Rollout is about 20 lines over timm attention hooks, so it stays in-repo and tested.
+The shared-model and shared-method pairs follow HW3's D-23 logic: without them, a difference could be either the architecture or the explanation method. Grad-CAM comes from the `grad-cam` package (spec §6 recommends existing implementations), stopping before its min-max scaling so all-zero maps stay visible (D-17). Rollout is about 20 lines over timm attention hooks, so it stays in-repo and tested.
 
 **`alignment.py`** (D-04): `MetricSpec(name, fn, higher_is_better, kind, note)`, as in HW3's registry.
 
@@ -192,7 +192,7 @@ Numbers are not used until these pass.
 | 3 | sAUC ≈ 0.5 for a random map |
 | 4 | Our human map vs the dataset's own `fixMap`: high CC. ✔ B-03: all 1003 images, mean 0.99986, min 0.991 |
 | 5 | Scaled fixations stay on the same content; a visual overlay in `01_data_check`. ✔ B-03: corner test + 5 images inspected |
-| 6 | Grad-CAM: map changes with target class; rollout: a uniform-attention input gives a uniform map |
+| 6 | Grad-CAM: map changes with target class; rollout: a uniform-attention input gives a uniform map. ✔ B-06, plus a worked example for each and an independent Grad-CAM cross-check |
 | 7 | Prediction sanity after the no-crop resize. ✔ B-05: 12 images inspected, 2 pinned in tests |
 | 8 | Baseline ordering: `shuffled` scores are clearly below same-image human-vs-human scores |
 | 9 | Cross-device: CPU vs MPS/CUDA maps agree closely on 20 images, tolerance recorded |
@@ -212,7 +212,7 @@ Numbers are not used until these pass.
 | D-08 | Rollout: mean head fusion, no discard ratio | Closest to the original formulation; discard ratio is another tunable that invites cherry-picking |
 | D-15 | Report each explainer's `grid` reference; also compare ResNet and ViT with the ViT map reduced to 7×7 | Coarse grids cap CC, so a direct ResNet vs ViT comparison partly measures grid size |
 
-**Priority if time runs short.** Keep: D-01, ResNet and ViT with at least `resnet50_gradcam` and `vit_rollout`, CC + NSS, `center` and `shuffled`, 5 cases, annotations for the cases. Cut first: inter-observer `ceiling`, center-crop sensitivity, CLIP, then `randomization_check`.
+**Priority if time runs short.** Keep: D-01, ResNet and ViT with at least `resnet50_gradcam` and `vit_rollout`, CC + NSS, `center` and `shuffled`, 5 cases, annotations for the cases. Cut first: inter-observer `ceiling`, CLIP, then `randomization_check`. Center-crop sensitivity (B-25) stays, because cropping measurably changes predictions (D-16).
 
 **`ceiling` depends on per-subject fixations.** Only `DATA.zip` has them, and it holds raw eye traces. Existing loaders such as `pysaliency` extract fixations by running Judd's MATLAB code, so they need MATLAB or Octave. This gets one time-boxed spike. If it fails, the missing ceiling goes in the report as a limitation.
 
