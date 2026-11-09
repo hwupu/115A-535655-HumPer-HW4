@@ -58,6 +58,10 @@ def preprocess(spec: ModelSpec, image: Image.Image) -> torch.Tensor:
     return torch.from_numpy((array - mean) / std).permute(2, 0, 1).unsqueeze(0)
 
 
+def class_name(index: int) -> str:
+    return _imagenet.index_to_description(index)
+
+
 @torch.no_grad()
 def predict(model: torch.nn.Module, x: torch.Tensor, k: int = 5) -> list[tuple[int, str, float]]:
     """Return the top-`k` (class index, class name, probability) for one image."""

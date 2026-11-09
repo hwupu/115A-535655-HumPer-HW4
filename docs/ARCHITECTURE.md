@@ -43,6 +43,7 @@ Mirrors HW3. The one difference is `docs/` instead of `doc/`, matching the folde
 │   ├── alignment.py          # metric registry: CC, NSS, sAUC
 │   ├── evaluate.py           # baselines, bootstrap CIs, paired tests, factor tables
 │   ├── failures.py           # low-alignment mining, reliability filter, diversity caps
+│   ├── store.py              # per-image raw grids, atomic and resumable
 │   ├── probes.py             # occlusion probe, model-randomization check
 │   └── viz.py                # case figures, distributions
 ├── scripts/
@@ -138,7 +139,9 @@ The shared-model and shared-method pairs follow HW3's D-23 logic: without them, 
 
 **`scores.csv`**: tidy, one row per `(image_id, explainer)`. Columns `cc, nss, sauc, device`. Baselines are stored as extra `explainer` values, so all comparisons use the same code path.
 
-**`predictions.csv`**: `image_id, model, top1_idx, top1_name, top1_prob, top5`.
+**`predictions.csv`**: `image_id, model, top1_idx, top1_name, top1_prob, top5_idx`.
+
+**`store.py`**: one compressed file per image in `results/maps/`, holding each explainer's raw grid and each model's top-5 classes. Writes are atomic, so `compute_maps.py` can resume after an interruption.
 
 **`evaluate.py`**: scores only mean something against reference points.
 

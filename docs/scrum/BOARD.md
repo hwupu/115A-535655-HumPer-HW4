@@ -15,10 +15,10 @@ Async daily: add one dated line under *Daily log* (`done / next / blocked`).
 ### Doing
 
 ### Review
-- [ ] B-08 smoke run — A→B
 - [ ] B-01 scaffold — A (awaiting human read-through)
 
 ### Done
+- [x] B-08 smoke run — PR #6, approved and merged by A; CPU vs CUDA still open
 - [x] B-07 `alignment.py` — PR #5, approved and merged by A; WSL run still open
 - [x] B-06 `explain.py` — PR #4, approved and merged by A; WSL run still open
 - [x] B-05 `models.py` — PR #3, approved and merged by A; WSL run still open
@@ -36,6 +36,7 @@ Async daily: add one dated line under *Daily log* (`done / next / blocked`).
 - 11-09 A: B-05 merged, D-16 accepted, B-25 kept (D-18). B-06 → Review (P-007).
 - 11-09 A: B-06 merged, D-17 accepted. B-07 → Review (P-008).
 - 11-09 A: B-07 merged, D-19 accepted. B-08 → Review (P-009). End-to-end run works; CPU and MPS agree.
+- 11-09 A: B-08 merged. B-09 → Review (P-010). All 1003 images done on MPS in about 5 min; no all-zero grids.
 
 ### Retro
 - Keep:
@@ -46,6 +47,9 @@ Async daily: add one dated line under *Daily log* (`done / next / blocked`).
 ## Sprint 1 — Mon 11-16 → Sun 11-22
 
 **Goal:** all maps and scores, baselines, candidates, annotations. Revisit the plan after the 11-17 lecture; HW3 is also due 11-17.
+
+### Review
+- [ ] B-09 full maps and predictions — A→B (started early, 11-09)
 
 ## Sprint 2 — Mon 11-23 → Sun 11-29
 

@@ -1,0 +1,26 @@
+{
+  "date_utc": "2026-11-09T14:25:19+00:00",
+  "n_images": 1003,
+  "computed_this_run": 998,
+  "seconds_this_run": 281.5,
+  "device": "mps",
+  "platform": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.11.14",
+  "packages": {
+    "torch": "2.15.0",
+    "timm": "1.0.31",
+    "grad-cam": "1.5.7",
+    "numpy": "2.4.6",
+    "pillow": "13.0.0",
+    "scipy": "1.17.1"
+  },
+  "timm_ids": {
+    "resnet50": "resnet50.tv2_in1k",
+    "vit_b16": "vit_base_patch16_224.augreg2_in21k_ft_in1k"
+  },
+  "all_zero_grids": {
+    "resnet50_gradcam": 0,
+    "vit_gradcam": 0,
+    "vit_rollout": 0
+  }
+}
