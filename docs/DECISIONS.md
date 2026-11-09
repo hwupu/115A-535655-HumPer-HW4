@@ -24,7 +24,7 @@ A `Proposed` decision needs both members to agree at the next planning/review. D
 | D-17 | 2026-11-09 | Grad-CAM: target logit (pre-softmax), `grad-cam` package up to the ReLU, no min-max scaling, stored on the raw grid | The package's normal output scales each map, turning an all-zero map into a valid-looking one and losing the grid. Checked against an independent implementation | Accepted (A, on PR #4; B has not reviewed) | A |
 | D-18 | 2026-11-09 | Keep center-crop sensitivity (B-25) instead of cutting it early | No-crop changes the top-1 class on many images (D-16), so the choice needs measuring | Accepted | A |
 | D-19 | 2026-11-09 | sAUC negatives: canvas fixations of all other images; ties count as half | No random sampling, so scores are deterministic; a center prior then scores about 0.5 (tested) | Accepted (A, on PR #5; B has not reviewed) | A |
-| D-20 | 2026-11-09 | Blind labelling: 139 images (random 100 with seed 2026, plus 45 candidates, 6 overlap) in shuffled order; annotators see only the image and predicted classes, as "Model A/B". The shortlist stays out of git until labelling is done | Hides which images were chosen for low scores. Random-sample statistics stay independent of scores | Proposed | A |
+| D-20 | 2026-11-09 | Blind labelling: 139 images (random 100 with seed 2026, plus 45 candidates, 6 overlap) in shuffled order; annotators see only the image and predicted classes, as "Model A/B". The shortlist stays out of git until labelling is done | Hides which images were chosen for low scores. Random-sample statistics stay independent of scores | Accepted (A, on PR #10; B has not reviewed) | A |
 
 ## Template
 
