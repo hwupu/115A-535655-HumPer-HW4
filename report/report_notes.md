@@ -22,4 +22,6 @@ Points that must reach the report. Check off when drafted.
 
 - [ ] **Hypothesis to test: Rollout hot spots on background (§4, §5).** On 6 inspected images, ViT Rollout showed bright isolated patches on empty background, and ViT Grad-CAM was speckled, unlike ResNet's smooth object-centered maps. The calculations pass their tests, so this looks like model behavior. Verify it on the full set in B-11/B-12 before claiming anything; a few extreme patches may also affect CC.
 
+- [ ] **Possible metric disagreement to check (§3).** In a 20-image smoke run, `vit_rollout` had the lowest CC but the highest sAUC. Too few images to conclude anything; see whether it holds in B-11.
+
 - [ ] **Free viewing vs classification (§5 Discussion).** Human observers had no classification task, so low alignment is not automatically a model failure.

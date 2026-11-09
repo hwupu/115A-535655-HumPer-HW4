@@ -43,6 +43,11 @@ def sauc(saliency: np.ndarray, fixations: np.ndarray, negatives: np.ndarray) -> 
     return float((ranks[:n_pos].sum() - n_pos * (n_pos + 1) / 2) / (n_pos * n_neg))
 
 
+def other_fixations(fixations_by_id: dict[str, np.ndarray], image_id: str) -> np.ndarray:
+    """Return the sAUC negatives for one image: the fixations of every other image (D-19)."""
+    return np.concatenate([xy for key, xy in fixations_by_id.items() if key != image_id])
+
+
 @dataclass(frozen=True)
 class MetricSpec:
     name: str

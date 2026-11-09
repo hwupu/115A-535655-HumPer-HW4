@@ -5,6 +5,7 @@ import pytest
 import torch
 from torch import nn
 
+from humper import data, get_device
 from humper import explain as ex
 from humper import models
 
@@ -124,6 +125,24 @@ def test_captured_attention_is_valid_and_does_not_change_the_model(vit, x):
     assert attentions[5].sum(dim=-1) == pytest.approx(torch.ones(12, 197), abs=1e-4)
     assert [block.attn.fused_attn for block in vit.blocks] == fused
     assert torch.allclose(before, after)
+
+
+@pytest.mark.skipif(
+    get_device().type == "cpu" or not (data.MIT_ROOT / data.STIMULI).is_dir(),
+    reason="needs an accelerator and MIT1003",
+)
+@pytest.mark.parametrize("name", list(ex.EXPLAINERS))
+def test_cpu_and_accelerator_agree(name):
+    """ARCHITECTURE §7 check 9. Tolerance: 1% of the map's peak."""
+    spec = ex.EXPLAINERS[name]
+    model_spec = models.MODELS[spec.model]
+    image = data.load_image(data.load_images(n=1, seed=0).image_id[0])
+    maps_by_device = []
+    for device in (CPU, get_device()):
+        x = models.preprocess(model_spec, image).to(device)
+        maps_by_device.append(ex.explain(spec, models.create(model_spec, device), x))
+    a, b = maps_by_device
+    assert np.abs(a - b).max() <= 0.01 * a.max()
 
 
 def test_explain_returns_canvas(vit, x):

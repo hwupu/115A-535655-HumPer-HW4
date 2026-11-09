@@ -125,6 +125,11 @@ def test_no_fixations_is_undefined(a):
     assert math.isnan(al.sauc(a, empty, np.array([[1, 1]])))
 
 
+def test_other_fixations_excludes_only_this_image():
+    points = {"a-b": np.array([[1, 1]]), "a": np.array([[2, 2], [3, 3]]), "c": np.array([[4, 4]])}
+    assert al.other_fixations(points, "a").tolist() == [[1, 1], [4, 4]]
+
+
 def test_registry_directions():
     assert all(spec.higher_is_better for spec in al.METRICS.values())
 

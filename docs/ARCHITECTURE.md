@@ -128,7 +128,7 @@ Heatmaps must live in one space before comparison, and the report must describe 
 
 The shared-model and shared-method pairs follow HW3's D-23 logic: without them, a difference could be either the architecture or the explanation method. Grad-CAM comes from the `grad-cam` package (spec §6 recommends existing implementations), stopping before its min-max scaling so all-zero maps stay visible (D-17). Rollout is about 20 lines over timm attention hooks, so it stays in-repo and tested.
 
-**`alignment.py`** (D-04): `MetricSpec(name, fn, higher_is_better, kind, note)`, as in HW3's registry. `score(saliency, human, fixations, negatives)` returns all metrics for one map; `negatives` are the fixations of all other images (D-19).
+**`alignment.py`** (D-04): `MetricSpec(name, fn, higher_is_better, kind, note)`, as in HW3's registry. `score(saliency, human, fixations, negatives)` returns all metrics for one map; `other_fixations(by_id, image_id)` builds `negatives` from all other images (D-19).
 
 | Metric | Measures | Why here |
 |---|---|---|
@@ -195,7 +195,7 @@ Numbers are not used until these pass.
 | 6 | Grad-CAM: map changes with target class; rollout: a uniform-attention input gives a uniform map. ✔ B-06, plus a worked example for each and an independent Grad-CAM cross-check |
 | 7 | Prediction sanity after the no-crop resize. ✔ B-05: 12 images inspected, 2 pinned in tests |
 | 8 | Baseline ordering: `shuffled` scores are clearly below same-image human-vs-human scores |
-| 9 | Cross-device: CPU vs MPS/CUDA maps agree closely on 20 images, tolerance recorded |
+| 9 | Cross-device: CPU vs MPS/CUDA maps agree within 1% of the map peak. ✔ B-08, MPS only: 20 images, max 0.05%; CUDA still open |
 | 10 | `scores.csv` rows reproduce from the stored maps |
 
 ## 8. Proposed decisions
