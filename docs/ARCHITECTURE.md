@@ -42,6 +42,7 @@ Mirrors HW3. The one difference is `docs/` instead of `doc/`, matching the folde
 │   ├── maps.py               # geometry and normalization (the only place)
 │   ├── alignment.py          # metric registry: CC, NSS, sAUC
 │   ├── evaluate.py           # baselines, bootstrap CIs, paired tests, factor tables
+│   ├── categories.py         # image categories from the image and human data only
 │   ├── failures.py           # low-alignment mining, reliability filter, diversity caps
 │   ├── store.py              # per-image raw grids, atomic and resumable
 │   ├── probes.py             # occlusion probe, model-randomization check
@@ -166,6 +167,8 @@ Cases are tagged **shared** (all explainers low) or **explainer-specific** (one 
 **`probes.py`** (D-07): a heatmap alone cannot show that a model relies on a region.
 - `occlusion_probe()`: mask the top 20% of the human map, or of the model map, and record the drop in the target-class probability. If masking the model's region hurts confidence while masking the human region does not, the model is using something other than human-attended evidence. A shortcut claim in the report needs this support.
 - `randomization_check()`: randomize model weights and measure how much the explanation changes. An explainer that barely changes is not reflecting what the model learned.
+
+**Categories** (D-22): `categories.py` flags faces (YuNet), text (EasyOCR, at least 0.5% of the image), small salient attention, edge/texture-rich images and peripheral attention, using the image and human data only, never an explainer's map. `failures.category_effects()` compares each explainer inside and outside a category against itself; `category_cases()` draws candidates only from effects that survive Holm correction.
 
 **Observable factors** (D-21): MIT1003 has no class or content labels, and hand labelling was dropped. `05_factors` uses what can be computed: model confidence (within each model), whether ResNet-50 and ViT agree on the top-1 class, and how concentrated the human fixations are. Faces, text and correctness are discussed only for the final cases, in `annotations/case_notes.csv`.
 
