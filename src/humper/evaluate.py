@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 import numpy as np
 import pandas as pd
-from scipy.stats import wilcoxon
+from scipy.stats import spearmanr, wilcoxon
 
 from humper import alignment, data, explain, maps, models, store
 
@@ -118,6 +118,29 @@ def holm(p_values: np.ndarray) -> np.ndarray:
     adjusted = np.empty(len(p_values))
     adjusted[order] = np.minimum(np.maximum.accumulate(scaled), 1)
     return adjusted
+
+
+def spearman_factor(
+    scores: pd.DataFrame, explainer: str, factor_name: str, factor: pd.Series,
+    n_boot: int = 1000, seed: int = 0,
+) -> pd.DataFrame:
+    """Return the Spearman correlation between a per-image factor and each metric."""
+    part = scores[scores.explainer == explainer].set_index("image_id")
+    rng = np.random.default_rng(seed)
+    rows = []
+    for metric in alignment.METRICS:
+        joined = pd.concat([part[metric], factor.rename("factor")], axis=1, join="inner").dropna()
+        x, y = joined["factor"].to_numpy(), joined[metric].to_numpy()
+        result = spearmanr(x, y)
+        draws = [
+            spearmanr(x[idx], y[idx]).statistic for idx in rng.integers(0, len(x), (n_boot, len(x)))
+        ]
+        rows.append({
+            "explainer": explainer, "factor": factor_name, "metric": metric, "n": len(x),
+            "rho": float(result.statistic), "ci_low": float(np.percentile(draws, 2.5)),
+            "ci_high": float(np.percentile(draws, 97.5)), "p": float(result.pvalue),
+        })
+    return pd.DataFrame(rows)
 
 
 def center_similarity(table: pd.DataFrame) -> pd.DataFrame:

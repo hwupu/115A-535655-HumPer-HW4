@@ -15,6 +15,8 @@ Points that must reach the report. Check off when drafted.
 
 - [ ] **Human blur (§2).** σ = 24 native px, fitted to the dataset's own maps because its documentation gives no blur size or viewing geometry (D-13).
 
+- [ ] **Center-crop sensitivity (§2; D-25).** On 200 images, the crop keeps 89.8% of fixations on average (lowest 40.4%). The three explainers keep their order on every metric, and the center prior stays first on CC and NSS. On sAUC, ViT Grad-CAM (0.521) moves just above the center prior (0.491), both near chance. Under the crop, center-prior CC is 0.338 (no crop 0.403) and NSS 0.812 (1.262); ResNet-50 Grad-CAM NSS is 0.627 (0.901). The center prior still leads on CC and NSS. Do not say the crop inflates alignment. Table: `results/tables/crop_sensitivity.csv`.
+
 - [ ] **No-crop preprocessing has a cost (§2).** Compared with timm's default center crop on 100 images, the top-1 class agrees 66% (ResNet-50) and 55% (ViT-B/16), with nearly equal mean confidence. Many of these images have no clear ImageNet object.
 
 - [ ] **Confidence is not comparable across models (§5).** Mean top-1 probability over all 1003 images is 0.209 for ResNet-50 and 0.461 for ViT-B/16, so confidence analysis must be done within each model.
@@ -67,5 +69,10 @@ Points that must reach the report. Check off when drafted.
 - [ ] **Weight randomization (§2, §5).** Mean Spearman between trained and random-weight maps on 100 images: ResNet-50 Grad-CAM 0.015, ViT Grad-CAM -0.005, ViT Rollout -0.021, so all three depend on learned weights. Some random-weight Grad-CAM maps were all zero and are excluded (77 and 92 valid of 100).
 
 - [ ] **Case occlusion (§4).** `results/tables/occlusion_cases.csv`. Case 4 (willow) changes sign between fills for the human mask, so do not lean on occlusion there.
+
+- [ ] **Observable factors (§5; D-21).** All associations, with n = 1003 and Holm correction. Tables: `factor_correlations.csv`, `model_agreement_effect.csv`.
+  - Confidence: higher confidence goes with slightly better alignment on CC and NSS for ResNet-50 Grad-CAM (rho 0.12, 0.11) and ViT Grad-CAM (0.19, 0.17), but not reliably for ViT Rollout. Effects are small and not significant on sAUC.
+  - Spread of human attention: broader attention goes with worse ViT Rollout scores (CC rho -0.44, NSS -0.38, sAUC -0.30) and worse ResNet-50 Grad-CAM on NSS and sAUC (-0.22, -0.20). ViT Grad-CAM is unaffected.
+  - Model agreement: images where ResNet-50 and ViT agree align better for ViT Grad-CAM (+0.054, Holm p = 0.010). ResNet-50 Grad-CAM (+0.037) and ViT Rollout (+0.004) do not survive correction.
 
 - [ ] **Free viewing vs classification (§5 Discussion).** Human observers had no classification task, so low alignment is not automatically a model failure.
