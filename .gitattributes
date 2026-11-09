@@ -1,0 +1,11 @@
+# Normalise line endings so macOS and WSL/Windows don't fight.
+* text=auto eol=lf
+
+*.ipynb text eol=lf
+*.sh    text eol=lf
+
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.npz  binary
+*.pdf  binary
