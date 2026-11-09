@@ -1,0 +1,6 @@
+case,category,image_id,weak,strong,selection_reason,human_explanation
+1,face,i1126243635,resnet50_gradcam,vit_rollout,Top gap for ResNet-50 Grad-CAM on faces (D-22); accepted by A 2026-11-10,
+2,text,i2252029279,vit_rollout,vit_gradcam,Top gap for ViT Rollout on text (D-22); accepted by A 2026-11-10,
+3,edge_texture_rich,i2238366740,vit_rollout,vit_gradcam,Top gap for ViT Rollout on edge/texture-rich images (D-22); accepted by A 2026-11-10,
+4,small_salient,i104935329,vit_gradcam,vit_rollout,Top gap for the ViT Rollout strength on small salient attention (D-22); accepted by A 2026-11-10,
+5,face,i2194959008,vit_gradcam,vit_rollout,Top gap for ViT Grad-CAM on faces (D-22); accepted by A 2026-11-10,

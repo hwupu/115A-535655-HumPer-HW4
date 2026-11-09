@@ -53,4 +53,19 @@ Points that must reach the report. Check off when drafted.
 
 - [ ] **Detector limits (§2).** Face detections were all correct on 20 sampled images. Text flags were real on about three-quarters of 20 sampled images, with false hits such as ornate ceilings, so text effects are less certain. Both are one-off visual checks.
 
+- [ ] **Occlusion across all images (§3, §5; D-23).** Mean drop in target-class probability when masking 20% of the image, blur / mean-color fill. `results/tables/occlusion_summary.csv`, `occlusion_paired.csv`.
+
+  | Model | Human region | Own Grad-CAM | ViT Rollout | Random |
+  |---|---|---|---|---|
+  | ResNet-50 | 0.122 / 0.117 | 0.147 / 0.142 | n/a | 0.084 / 0.087 |
+  | ViT-B/16 | 0.240 / 0.246 | 0.333 / 0.341 | 0.177 / 0.173 | 0.152 / 0.177 |
+
+  - Grad-CAM regions hurt confidence more than human-attended regions, in both models and fills. Masking is only one way to probe reliance, and masked images are unnatural.
+  - Human-attended regions also matter: they exceed random masks, so human and model evidence are partly shared.
+  - Rollout regions are close to random (above it with blur, level with it with mean fill) and below human regions, even though Rollout has the best sAUC. A high human-alignment score did not mean the map found what the model depends on. This fits the spec's warning about attention maps.
+
+- [ ] **Weight randomization (§2, §5).** Mean Spearman between trained and random-weight maps on 100 images: ResNet-50 Grad-CAM 0.015, ViT Grad-CAM -0.005, ViT Rollout -0.021, so all three depend on learned weights. Some random-weight Grad-CAM maps were all zero and are excluded (77 and 92 valid of 100).
+
+- [ ] **Case occlusion (§4).** `results/tables/occlusion_cases.csv`. Case 4 (willow) changes sign between fills for the human mask, so do not lean on occlusion there.
+
 - [ ] **Free viewing vs classification (§5 Discussion).** Human observers had no classification task, so low alignment is not automatically a model failure.
