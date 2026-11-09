@@ -155,10 +155,10 @@ The shared-model and shared-method pairs follow HW3's D-23 logic: without them, 
 Also: `summary()` for mean, median and image-bootstrap 95% CI; `paired()` for the Wilcoxon signed-rank test between explainers or against a baseline, on the same images; `factor_table()` for group comparisons and Spearman correlation with confidence.
 
 **`failures.py`** (HW3 D-06 and D-24 pattern): quantitative first, humans choose last.
-1. Reliability filter: drop images with too few fixations, plus low-ceiling images if `ceiling` exists.
+1. Reliability filter: drop the 5% of images with the fewest fixation points, plus low-ceiling images if `ceiling` exists.
 2. Rank by percentile of CC and NSS combined, so one metric's scale cannot dominate.
 3. Flag whether the image also falls below the `center` baseline.
-4. `select_diverse(cands, k, score, max_per)` is reused from HW3 and caps candidates per explainer and scene type.
+4. `select_candidates()` takes 10 images low for every explainer, 10 lowest per explainer, and 5 high-alignment contrasts, each image at most once.
 5. Write the full candidate list to `results/failures/`, then humans pick ≥ 5 from the top candidates and record why in `annotations/case_notes.csv`.
 
 Cases are tagged **shared** (all explainers low) or **explainer-specific** (one low, another high), because these support different explanations. One or two high-alignment images are shown for contrast.
@@ -167,7 +167,7 @@ Cases are tagged **shared** (all explainers low) or **explainer-specific** (one 
 - `occlusion_probe()`: mask the top 20% of the human map, or of the model map, and record the drop in the target-class probability. If masking the model's region hurts confidence while masking the human region does not, the model is using something other than human-attended evidence. A shortcut claim in the report needs this support.
 - `randomization_check()`: randomize model weights and measure how much the explanation changes. An explainer that barely changes is not reflecting what the model learned.
 
-**`annotations/labels.csv`** (D-06): MIT1003 has no class labels, so "model correctness" requires human judgment. A seeded random 100 images, plus every case candidate, are labelled with `pred_quality` (`correct`, `plausible`, `wrong`, `no_applicable_class`) and `has_face`, `has_person`, `has_text`, `scene_type`, `dominant_object`. Annotators see only the image and the prediction, **never the heatmap or score**. Factor statistics use the random sample only; candidates are chosen for low scores and would bias them.
+**`annotations/labels_<annotator>.csv`** (D-06, D-20): MIT1003 has no class labels, so "model correctness" requires human judgment. A seeded random 100 images, plus every case candidate, are labelled in the page from `scripts/build_label_sheet.py`, with `pred_quality_resnet50` and `pred_quality_vit_b16` (`correct`, `plausible`, `wrong`, `no_applicable_class`) and `has_face`, `has_person`, `has_text`, `scene_type`, `dominant_object`. Annotators see only the image and the prediction, **never the heatmap or score**. Factor statistics use the random sample only; candidates are chosen for low scores and would bias them.
 
 ## 6. Runtime (cross-platform)
 

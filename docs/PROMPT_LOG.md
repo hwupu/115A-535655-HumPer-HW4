@@ -17,6 +17,7 @@ This is our evidence for the course GenAI disclosure.
 | P-010 | 2026-11-09 | A | Claude Code / Opus 5.5 | B-09 | "yes. proceed" | PR #6 merged; `scripts/compute_maps.py`, `src/humper/store.py`, `tests/test_store.py`, `results/predictions.csv`, `results/maps_run_info.json` | Resume tested; all 1003 records checked for shape and finite values; predictions match the smoke run. Human review pending (PR) |
 | P-011 | 2026-11-09 | A | Claude Code / Opus 5.5 | B-10 | "ok. proceed" | PR #7 merged; `src/humper/evaluate.py`, `scripts/compute_scores.py`, `tests/test_evaluate.py`, `results/scores.csv`, `results/scores_run_info.json` | Grid references match the B-04 estimates; committed rows reproduce from stored maps; 77 tests pass. Human review pending (PR) |
 | P-012 | 2026-11-09 | A | Claude Code / Opus 5.5 | B-11 | "yes" (merge and continue) | PR #8 merged; `evaluate.summary/paired/holm/center_similarity`, `notebooks/02_alignment.ipynb`, `results/tables/*`, `results/figures/alignment/*` | Bootstrap, Wilcoxon and Holm tested; figures inspected by agent; 81 tests pass. Human review pending (PR) |
+| P-013 | 2026-11-09 | A | Claude Code / Opus 5.5 | B-12, B-13 | "yes. build labels" | PR #9 merged; `src/humper/{failures,labeling}.py`, `src/humper/label_sheet.html`, `scripts/build_label_sheet.py`, `tests/test_labeling.py`, `annotations/sheet_ids.csv`, D-20 | Selection tests with planted cases; page logic run in a simulated DOM, not yet in a real browser. Labels are human work |
 
 ## Template
 

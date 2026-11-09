@@ -42,6 +42,14 @@ uv run python scripts/download_data.py    # MIT1003, about 245 MB; verifies chec
 
 `data/` is gitignored. Never commit the dataset.
 
+## Labelling (B-13)
+
+```bash
+uv run python scripts/build_label_sheet.py
+```
+
+Open `results/labeling/label_sheet.html`, label on your own, then save the downloaded CSV as `annotations/labels_<name>.csv`. Don't open `results/failures/` or any heatmap figures until you've finished.
+
 ## Repo layout
 
 ```
