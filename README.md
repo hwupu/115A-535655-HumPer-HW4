@@ -36,7 +36,11 @@ uv run pytest
 
 ### 3. Get the data
 
-`scripts/download_data.py` is added in B-03. `data/` is gitignored. Never commit the dataset.
+```bash
+uv run python scripts/download_data.py    # MIT1003, about 245 MB; verifies checksums and file counts
+```
+
+`data/` is gitignored. Never commit the dataset.
 
 ## Repo layout
 

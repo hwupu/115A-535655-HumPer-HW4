@@ -101,7 +101,7 @@ Heatmaps must live in one space before comparison, and the report must describe 
 | Step | Human | Model |
 |---|---|---|
 | Source | Fixation points at native resolution | Grad-CAM or rollout on the model grid |
-| Build | Gaussian blur at native resolution, σ ≈ 1° of visual angle (D-05) | Bilinear upsample to 224×224 |
+| Build | Gaussian blur at native resolution, σ = 24 px (D-13) | Bilinear upsample to 224×224 |
 | To canvas | Area-downsample to 224×224; fixation coordinates scaled by (224/W, 224/H) | Already there |
 | Thresholding | None | None |
 | Per-metric normalization | CC: z-score | CC: z-score. NSS: z-score, sampled at fixations. sAUC: rank-based, none needed |
@@ -112,7 +112,7 @@ Heatmaps must live in one space before comparison, and the report must describe 
 
 ## 5. Key interfaces
 
-**`data.py`**: `load_images(root, n=None, seed=0) -> DataFrame` with columns `image_id, rel_path, width, height, n_fixations`. Also `load_fixations(image_id) -> (N,2) xy` and `human_map(image_id, sigma) -> (224,224) float32`.
+**`data.py`**: `load_images(root, n=None, seed=0) -> DataFrame` with columns `image_id, rel_path, width, height, n_fixations`. Also `load_fixations(image_id) -> (N,2) xy`, `load_fix_map(image_id)` and `load_image(image_id)`. Smoothing and scaling live in `maps.py`: `human_map_native(fixations, size, sigma)` and `scale_fixations(fixations, size)`.
 
 **`models.py`**: `ModelSpec(name, timm_id, family, target_layer, reshape)`; `create(spec, device)` returns the model in eval mode with its **own** mean/std from the timm config (ResNet and ViT weights differ; never share one normalization).
 
@@ -187,8 +187,8 @@ Numbers are not used until these pass.
 | 1 | CC(a, a) = 1, CC(a, −a) = −1, CC is invariant to scale and offset |
 | 2 | NSS of a map peaked exactly at the fixations is high; a constant map gives `NaN`, not a crash |
 | 3 | sAUC ≈ 0.5 for a random map |
-| 4 | Our human map vs the dataset's own `fixMap`: high CC, or the difference is explained in `DECISIONS.md` |
-| 5 | Scaled fixations land on the human-map peak; a visual overlay in `01_data_check` |
+| 4 | Our human map vs the dataset's own `fixMap`: high CC. ✔ B-03: all 1003 images, mean 0.99986, min 0.991 |
+| 5 | Scaled fixations stay on the same content; a visual overlay in `01_data_check`. ✔ B-03: corner test + 5 images inspected |
 | 6 | Grad-CAM: map changes with target class; rollout: a uniform-attention input gives a uniform map |
 | 7 | Prediction sanity: a few known images give sensible ImageNet top-1 after the no-crop resize |
 | 8 | Baseline ordering: `shuffled` scores are clearly below same-image human-vs-human scores |
@@ -203,7 +203,7 @@ Numbers are not used until these pass.
 | D-02 | ResNet-50 + ViT-B/16, three explainers (§5) | Separates architecture from method. Single-explainer is the minimum and would leave nothing to compare. CLIP is a stretch goal |
 | D-03 | No-crop resize, 224×224 canvas (§4) | Keeps all fixations; center crop would bias alignment |
 | D-04 | CC + NSS main, sAUC supplementary | Complementary, with a center-bias control. SIM and KL add little and cost report space |
-| D-05 | Human blur σ ≈ 1° visual angle, from the MIT1003 viewing setup | Standard practice. Exact pixels confirmed from dataset documentation in the data ticket |
+| D-13 | Human blur σ = 24 native px (replaces D-05) | Best fit to the dataset's own fixation maps; its documentation gives no blur size or viewing geometry |
 | D-06 | Score all 1003; annotate a random 100 blind | Far above the 50 minimum at little compute cost; hand labelling is the true cost, so it is capped |
 | D-07 | Occlusion probe on selected cases | Turns "the model seems to use the background" into a testable claim |
 | D-08 | Rollout: mean head fusion, no discard ratio | Closest to the original formulation; discard ratio is another tunable that invites cherry-picking |
@@ -216,7 +216,7 @@ Numbers are not used until these pass.
 
 Carried into `AGENTS.md`, as HW3 did for direction alignment.
 
-1. **Task mismatch.** MIT1003 observers free-viewed the images; models were classifying them. Low alignment is not automatically a model failure, and the report must say so.
+1. **Task mismatch.** MIT1003 observers free-viewed the images; models were classifying them. Low alignment is not automatically a model failure, and the report must say so. The human maps also cover only each viewer's top 6 fixations (dataset README), so they describe **early** attention.
 2. **No causal wording from heatmaps.** Write "the explanation highlights X", not "the model looks at X because…", unless a probe supports it.
 3. **Center bias first.** A score is only reported as alignment alongside its `center` baseline.
 4. **Humans own the interpretation.** AI drafts observations only; case explanations are the team's reasoning (course GenAI policy).
