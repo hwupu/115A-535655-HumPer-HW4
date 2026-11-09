@@ -16,12 +16,16 @@ Points that must reach the report. Check off when drafted.
 
 - [ ] **No-crop preprocessing has a cost (§2).** Compared with timm's default center crop on 100 images, the top-1 class agrees 66% (ResNet-50) and 55% (ViT-B/16), with nearly equal mean confidence. Many of these images have no clear ImageNet object.
 
-- [ ] **Confidence is not comparable across models (§5).** Mean top-1 probability on those images is about 0.19 for ResNet-50 and 0.41 for ViT-B/16, so confidence analysis must be done within each model.
+- [ ] **Confidence is not comparable across models (§5).** Mean top-1 probability over all 1003 images is 0.209 for ResNet-50 and 0.461 for ViT-B/16, so confidence analysis must be done within each model.
 
 - [ ] **ImageNet labels often do not fit (§1, §5).** Scene images get arbitrary labels (a misty lake as "traffic light"), which is why prediction quality is hand-labelled.
 
 - [ ] **Hypothesis to test: Rollout hot spots on background (§4, §5).** On 6 inspected images, ViT Rollout showed bright isolated patches on empty background, and ViT Grad-CAM was speckled, unlike ResNet's smooth object-centered maps. The calculations pass their tests, so this looks like model behavior. Verify it on the full set in B-11/B-12 before claiming anything; a few extreme patches may also affect CC.
 
 - [ ] **Possible metric disagreement to check (§3).** In a 20-image smoke run, `vit_rollout` had the lowest CC but the highest sAUC. Too few images to conclude anything; see whether it holds in B-11.
+
+- [ ] **The two models often disagree (§1, §5).** Their top-1 class matches on only 47% of the 1003 images, which limits how far "the same task" can be assumed when comparing their explanations.
+
+- [ ] **No all-zero maps.** None of the 3009 stored grids was all zero, so no scores are undefined for that reason (B-09).
 
 - [ ] **Free viewing vs classification (§5 Discussion).** Human observers had no classification task, so low alignment is not automatically a model failure.
