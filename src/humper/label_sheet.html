@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>HW4 image labelling</title>
+<style>
+  body { font: 15px/1.45 -apple-system, "Segoe UI", sans-serif; margin: 0; color: #222; background: #f6f6f4; }
+  header { position: sticky; top: 0; z-index: 2; background: #fff; border-bottom: 1px solid #ddd; padding: 10px 20px; display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+  main { max-width: 1100px; margin: 0 auto; padding: 16px 20px 60px; }
+  .intro { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 12px 18px; margin-bottom: 16px; }
+  .card { background: #fff; border: 1px solid #ddd; border-left: 5px solid #bbb; border-radius: 8px; padding: 14px; margin-bottom: 16px; display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: 18px; }
+  .card.done { border-left-color: #2a6fb0; }
+  img { width: 100%; max-height: 560px; object-fit: contain; background: #eee; }
+  .num { color: #666; font-size: 13px; margin-bottom: 6px; }
+  fieldset { border: 0; padding: 0; margin: 0 0 10px; }
+  legend { font-weight: 600; padding: 0; }
+  label { margin-right: 12px; white-space: nowrap; display: inline-block; }
+  .pred { font-style: italic; font-weight: 400; }
+  textarea { width: 100%; box-sizing: border-box; height: 40px; }
+  button { font: inherit; padding: 6px 14px; }
+  input[type=text] { font: inherit; padding: 4px 6px; }
+</style>
+</head>
+<body>
+<header>
+  <label>Your name <input type="text" id="annotator" placeholder="e.g. hwupu"></label>
+  <strong id="progress"></strong>
+  <button id="next">Next unfinished</button>
+  <button id="download">Download CSV</button>
+</header>
+<main>
+  <div class="intro">
+    <p><strong>Label from the image and the predicted classes only.</strong> Do not open heatmaps, scores or the candidate list until you have finished, and label independently of your teammate.</p>
+    <p>Prediction quality: <em>correct</em> names what the image shows; <em>plausible</em> is a defensible reading; <em>wrong</em> is clearly mistaken; <em>no applicable class</em> means ImageNet has no fitting label for this image. Your answers save automatically in this browser.</p>
+  </div>
+  <div id="cards"></div>
+</main>
+<script>
+const ITEMS = /*__ITEMS__*/[];
+const STORE = "hw4-labels-v1";
+const QUALITY = [["correct", "correct"], ["plausible", "plausible"], ["wrong", "wrong"], ["no_applicable_class", "no applicable class"]];
+const YESNO = [["yes", "yes"], ["no", "no"]];
+const SCENE = [["indoor", "indoor"], ["outdoor_manmade", "outdoor man-made"], ["outdoor_natural", "outdoor natural"], ["other", "other"]];
+const REQUIRED = ["pred_quality_resnet50", "pred_quality_vit_b16", "has_face", "has_person", "has_text", "scene_type", "dominant_object"];
+const COLUMNS = ["image_id", "annotator", ...REQUIRED, "notes"];
+
+let state = { annotator: "", labels: {} };
+try { state = Object.assign(state, JSON.parse(localStorage.getItem(STORE) || "{}")); } catch (e) {}
+const save = () => localStorage.setItem(STORE, JSON.stringify(state));
+const isDone = id => REQUIRED.every(key => (state.labels[id] || {})[key]);
+
+function setValue(id, field, value) {
+  (state.labels[id] = state.labels[id] || {})[field] = value;
+  save();
+  document.getElementById("card-" + id).classList.toggle("done", isDone(id));
+  updateProgress();
+}
+
+function addGroup(card, id, field, title, options, predicted) {
+  const group = document.createElement("fieldset");
+  const legend = document.createElement("legend");
+  legend.textContent = title + (predicted ? ": " : "");
+  if (predicted) {
+    const name = document.createElement("span");
+    name.className = "pred";
+    name.textContent = predicted;
+    legend.append(name);
+  }
+  group.append(legend);
+  for (const [value, text] of options) {
+    const label = document.createElement("label");
+    const input = document.createElement("input");
+    input.type = "radio";
+    input.name = id + "/" + field;
+    input.checked = (state.labels[id] || {})[field] === value;
+    input.addEventListener("change", () => setValue(id, field, value));
+    label.append(input, " " + text);
+    group.append(label);
+  }
+  card.append(group);
+}
+
+function build() {
+  const root = document.getElementById("cards");
+  ITEMS.forEach((item, index) => {
+    const card = document.createElement("section");
+    card.className = "card" + (isDone(item.image_id) ? " done" : "");
+    card.id = "card-" + item.image_id;
+    const left = document.createElement("div");
+    const number = document.createElement("div");
+    number.className = "num";
+    number.textContent = "Image " + (index + 1) + " of " + ITEMS.length;
+    const image = document.createElement("img");
+    image.loading = "lazy";
+    image.src = item.src;
+    image.alt = "";
+    left.append(number, image);
+    const form = document.createElement("div");
+    addGroup(form, item.image_id, "pred_quality_resnet50", "Model A says", QUALITY, item.resnet50);
+    addGroup(form, item.image_id, "pred_quality_vit_b16", "Model B says", QUALITY, item.vit_b16);
+    addGroup(form, item.image_id, "has_face", "Visible face?", YESNO);
+    addGroup(form, item.image_id, "has_person", "Visible person?", YESNO);
+    addGroup(form, item.image_id, "has_text", "Readable text?", YESNO);
+    addGroup(form, item.image_id, "scene_type", "Scene", SCENE);
+    addGroup(form, item.image_id, "dominant_object", "One dominant object?", YESNO);
+    const notes = document.createElement("textarea");
+    notes.placeholder = "Notes (optional)";
+    notes.value = (state.labels[item.image_id] || {}).notes || "";
+    notes.addEventListener("input", () => setValue(item.image_id, "notes", notes.value));
+    form.append(notes);
+    card.append(left, form);
+    root.append(card);
+  });
+}
+
+function updateProgress() {
+  const done = ITEMS.filter(item => isDone(item.image_id)).length;
+  document.getElementById("progress").textContent = done + " / " + ITEMS.length + " done";
+}
+
+function csvCell(value) {
+  const text = String(value === undefined ? "" : value);
+  return /[",\n\r]/.test(text) ? '"' + text.replace(/"/g, '""') + '"' : text;
+}
+
+function toCsv() {
+  const rows = ITEMS.map(item => {
+    const row = Object.assign({}, state.labels[item.image_id], { image_id: item.image_id, annotator: state.annotator });
+    return COLUMNS.map(column => csvCell(row[column])).join(",");
+  });
+  return [COLUMNS.join(","), ...rows].join("\n") + "\n";
+}
+
+function download() {
+  if (!state.annotator.trim()) { alert("Please enter your name first."); return; }
+  const missing = ITEMS.filter(item => !isDone(item.image_id)).length;
+  if (missing && !confirm(missing + " images are unfinished. Download anyway?")) return;
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(new Blob([toCsv()], { type: "text/csv" }));
+  link.download = "labels_" + state.annotator.trim().replace(/[^A-Za-z0-9_-]/g, "_") + ".csv";
+  link.click();
+}
+
+const nameInput = document.getElementById("annotator");
+nameInput.value = state.annotator;
+nameInput.addEventListener("input", () => { state.annotator = nameInput.value; save(); });
+document.getElementById("download").addEventListener("click", download);
+document.getElementById("next").addEventListener("click", () => {
+  const item = ITEMS.find(entry => !isDone(entry.image_id));
+  if (item) document.getElementById("card-" + item.image_id).scrollIntoView({ behavior: "smooth" });
+});
+build();
+updateProgress();
+</script>
+</body>
+</html>
