@@ -114,6 +114,8 @@ Heatmaps must live in one space before comparison, and the report must describe 
 
 **`data.py`**: `load_images(root, n=None, seed=0) -> DataFrame` with columns `image_id, rel_path, width, height, n_fixations`. Also `load_fixations(image_id) -> (N,2) xy`, `load_fix_map(image_id)` and `load_image(image_id)`. Smoothing and scaling live in `maps.py`: `human_map_native(fixations, size, sigma)` and `scale_fixations(fixations, size)`.
 
+**`maps.py`**: `model_input(image)`, `human_map_canvas(fixations, size, sigma)`, `model_map_canvas(grid)`, `scale_fixations(...)`, `zscore(map)` (all NaN if constant), `through_grid(map, cells)`, and for figures only `to_display(map)`, `warp_to_image(map, size)`. Resizing uses PIL on float32 arrays, so it is device-independent.
+
 **`models.py`**: `ModelSpec(name, timm_id, family, target_layer, reshape)`; `create(spec, device)` returns the model in eval mode with its **own** mean/std from the timm config (ResNet and ViT weights differ; never share one normalization).
 
 **`explain.py`** (D-02): `ExplainerSpec(name, model, method, class_specific)`; `explain(spec, model, x, target=None) -> (224,224) float32`. `target` defaults to the model's top-1 prediction, because no ground-truth label exists here and the question is what supported the model's own decision.
@@ -144,6 +146,7 @@ The shared-model and shared-method pairs follow HW3's D-23 logic: without them, 
 |---|---|---|
 | `center` | Mean human map of all *other* images (leave-one-out) | Does the model beat "always look where people usually look"? |
 | `shuffled` | This model map vs another image's human map, seeded permutation | How high is the score with no image-specific match? |
+| `grid` (D-15) | Human map passed through the explainer's own grid (7×7 or 14×14) | What is the best score this grid allows? Mean CC ≈ 0.79 on 7×7, 0.94 on 14×14 |
 | `ceiling` (stretch, §8) | Leave-one-subject-out human vs remaining humans | How high can any model get? |
 
 Also: `summary()` for mean, median and image-bootstrap 95% CI; `paired()` for the Wilcoxon signed-rank test between explainers or against a baseline, on the same images; `factor_table()` for group comparisons and Spearman correlation with confidence.
@@ -207,6 +210,7 @@ Numbers are not used until these pass.
 | D-06 | Score all 1003; annotate a random 100 blind | Far above the 50 minimum at little compute cost; hand labelling is the true cost, so it is capped |
 | D-07 | Occlusion probe on selected cases | Turns "the model seems to use the background" into a testable claim |
 | D-08 | Rollout: mean head fusion, no discard ratio | Closest to the original formulation; discard ratio is another tunable that invites cherry-picking |
+| D-15 | Report each explainer's `grid` reference; also compare ResNet and ViT with the ViT map reduced to 7×7 | Coarse grids cap CC, so a direct ResNet vs ViT comparison partly measures grid size |
 
 **Priority if time runs short.** Keep: D-01, ResNet and ViT with at least `resnet50_gradcam` and `vit_rollout`, CC + NSS, `center` and `shuffled`, 5 cases, annotations for the cases. Cut first: inter-observer `ceiling`, center-crop sensitivity, CLIP, then `randomization_check`.
 

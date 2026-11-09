@@ -11,7 +11,6 @@ Async daily: add one dated line under *Daily log* (`done / next / blocked`).
 
 ### To Do
 - [ ] B-01c WSL setup — B
-- [ ] B-04 `maps.py` — A→B
 - [ ] B-05 `models.py` — A→B
 - [ ] B-06 `explain.py` — A→B
 - [ ] B-07 `alignment.py` — A→B
@@ -20,10 +19,11 @@ Async daily: add one dated line under *Daily log* (`done / next / blocked`).
 ### Doing
 
 ### Review
-- [ ] B-03 MIT1003 + `data.py` + notebook 01 — A→B (D-13 needs B's agreement)
+- [ ] B-04 `maps.py` — A→B (D-15 proposed)
 - [ ] B-01 scaffold — A (awaiting human read-through)
 
 ### Done
+- [x] B-03 MIT1003 + `data.py` + notebook 01 — PR #1, approved and merged by A; WSL run still open
 - [x] B-01b git + public GitHub repo; @ALLEN07056 invited — A
 - [x] B-02 GenAI policy; D-01..D-12 agreed — approved by A 11-09
 
@@ -31,6 +31,7 @@ Async daily: add one dated line under *Daily log* (`done / next / blocked`).
 - 11-09 A: architecture planned (P-001), scaffold built (P-002).
 
 - 11-09 A: B-03 → Review (P-004). Human blur fitted at σ = 24 px; maps cover early attention only.
+- 11-09 A: B-03 merged. B-04 → Review (P-005). Model grid size caps CC (7×7: 0.79, 14×14: 0.94), see D-15.
 
 ### Retro
 - Keep:
