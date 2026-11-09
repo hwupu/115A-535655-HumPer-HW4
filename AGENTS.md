@@ -12,6 +12,7 @@ Team of 2: Member A (@hwupu, macOS, Apple Silicon) and Member B (@ALLEN07056, Wi
 - `docs/PROCESS.md`: how we work (Scrum-lite, Definition of Done, AI rules)
 - `docs/ARCHITECTURE.md`: layout, data flow, spatial pipeline, interfaces, sanity checks
 - `docs/DECISIONS.md`: what is already decided; don't re-litigate `Accepted` items
+- `report/report_notes.md`: findings that must reach the report; check it when drafting
 - `docs/scrum/BOARD.md`: current sprint; `docs/scrum/BACKLOG.md`: all items
 
 ## Rules for the agent

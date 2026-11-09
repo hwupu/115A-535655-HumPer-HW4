@@ -116,7 +116,7 @@ Heatmaps must live in one space before comparison, and the report must describe 
 
 **`maps.py`**: `model_input(image)`, `human_map_canvas(fixations, size, sigma)`, `model_map_canvas(grid)`, `scale_fixations(...)`, `zscore(map)` (all NaN if constant), `through_grid(map, cells)`, and for figures only `to_display(map)`, `warp_to_image(map, size)`. Resizing uses PIL on float32 arrays, so it is device-independent.
 
-**`models.py`**: `ModelSpec(name, timm_id, family, target_layer, reshape)`; `create(spec, device)` returns the model in eval mode with its **own** mean/std from the timm config (ResNet and ViT weights differ; never share one normalization).
+**`models.py`**: `ModelSpec(name, timm_id, family, target_layer, grid, reshape)`; `create(spec, device)` returns the model in eval mode; `preprocess(spec, image)` applies the whole-image resize and the model's **own** mean/std from the timm config (ResNet and ViT weights differ; never share one normalization); `predict(model, x, k)` returns the top-k classes. Weights are pinned in D-16.
 
 **`explain.py`** (D-02): `ExplainerSpec(name, model, method, class_specific)`; `explain(spec, model, x, target=None) -> (224,224) float32`. `target` defaults to the model's top-1 prediction, because no ground-truth label exists here and the question is what supported the model's own decision.
 
@@ -126,7 +126,7 @@ Heatmaps must live in one space before comparison, and the report must describe 
 | `vit_gradcam` | ViT-B/16 | Yes | Against ResNet: same method, different architecture |
 | `vit_rollout` | ViT-B/16 | No | Against `vit_gradcam`: same model, different method |
 
-The shared-model and shared-method pairs follow HW3's D-23 logic: without them, a difference could be either the architecture or the explanation method. Grad-CAM comes from the `grad-cam` package (spec §6 recommends existing implementations). Rollout is about 20 lines over timm attention hooks, so it stays in-repo and tested. Exact timm IDs are pinned during the smoke run.
+The shared-model and shared-method pairs follow HW3's D-23 logic: without them, a difference could be either the architecture or the explanation method. Grad-CAM comes from the `grad-cam` package (spec §6 recommends existing implementations). Rollout is about 20 lines over timm attention hooks, so it stays in-repo and tested.
 
 **`alignment.py`** (D-04): `MetricSpec(name, fn, higher_is_better, kind, note)`, as in HW3's registry.
 
@@ -193,7 +193,7 @@ Numbers are not used until these pass.
 | 4 | Our human map vs the dataset's own `fixMap`: high CC. ✔ B-03: all 1003 images, mean 0.99986, min 0.991 |
 | 5 | Scaled fixations stay on the same content; a visual overlay in `01_data_check`. ✔ B-03: corner test + 5 images inspected |
 | 6 | Grad-CAM: map changes with target class; rollout: a uniform-attention input gives a uniform map |
-| 7 | Prediction sanity: a few known images give sensible ImageNet top-1 after the no-crop resize |
+| 7 | Prediction sanity after the no-crop resize. ✔ B-05: 12 images inspected, 2 pinned in tests |
 | 8 | Baseline ordering: `shuffled` scores are clearly below same-image human-vs-human scores |
 | 9 | Cross-device: CPU vs MPS/CUDA maps agree closely on 20 images, tolerance recorded |
 | 10 | `scores.csv` rows reproduce from the stored maps |
