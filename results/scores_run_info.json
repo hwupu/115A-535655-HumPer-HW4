@@ -1,0 +1,11 @@
+{
+  "seed": 0,
+  "n_images": 1003,
+  "n_rows": 11033,
+  "undefined_by_metric": {
+    "cc": 0,
+    "nss": 0,
+    "sauc": 0
+  },
+  "maps_date_utc": "2026-11-09T14:25:19+00:00"
+}

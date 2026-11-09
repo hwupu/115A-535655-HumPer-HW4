@@ -15,6 +15,7 @@ This is our evidence for the course GenAI disclosure.
 | P-008 | 2026-11-09 | A | Claude Code / Opus 5.5 | B-07 | "yes, proceed" | PR #4 merged; `src/humper/alignment.py`, `tests/test_alignment.py`, D-19 | Worked examples, SciPy cross-checks, center-prior test; 66 tests pass. Human review pending (PR) |
 | P-009 | 2026-11-09 | A | Claude Code / Opus 5.5 | B-08 | "proceed" | PR #5 merged; `scripts/smoke_run.py`, `alignment.other_fixations`, cross-device test | 20-image run on CPU and MPS compared; tests pass. Human review pending (PR) |
 | P-010 | 2026-11-09 | A | Claude Code / Opus 5.5 | B-09 | "yes. proceed" | PR #6 merged; `scripts/compute_maps.py`, `src/humper/store.py`, `tests/test_store.py`, `results/predictions.csv`, `results/maps_run_info.json` | Resume tested; all 1003 records checked for shape and finite values; predictions match the smoke run. Human review pending (PR) |
+| P-011 | 2026-11-09 | A | Claude Code / Opus 5.5 | B-10 | "ok. proceed" | PR #7 merged; `src/humper/evaluate.py`, `scripts/compute_scores.py`, `tests/test_evaluate.py`, `results/scores.csv`, `results/scores_run_info.json` | Grid references match the B-04 estimates; committed rows reproduce from stored maps; 77 tests pass. Human review pending (PR) |
 
 ## Template
 
